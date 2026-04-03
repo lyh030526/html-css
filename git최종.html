@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Git & GitHub 강의 자료 정리</title>
+  <style>
+    :root {
+      --primary: #2dba4e; /* GitHub Green */
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --code-bg: #f1f5f9;
+      --week1: #475569; /* Slate for Week 1 */
+      --week2: #f14e32; /* Git Orange */
+      --week3: #0ea5e9; /* Blue */
+      --week4: #8b5cf6; /* Purple */
+      --week5: #10b981; /* Emerald */
+    }
+    
+    html {
+      scroll-padding-top: 75px; 
+      scroll-behavior: smooth;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+    /* HEADER */
+    header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; padding: 3rem 2rem 2.5rem; text-align: center; }
+    header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; }
+    header p  { margin-top: 0.6rem; opacity: 0.85; font-size: 1.05rem; }
+    .badges { display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { padding: 0.3rem 0.9rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; background: white; border-bottom: 1px solid var(--border); display: flex; justify-content: center; gap: 0.5rem; padding: 0.7rem 1rem; flex-wrap: wrap; }
+    nav a { padding: 0.4rem 1.1rem; border-radius: 999px; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+    
+    nav a:nth-child(1) { color: var(--week1); border: 1.5px solid var(--week1); }
+    nav a:nth-child(2) { color: var(--week2); border: 1.5px solid var(--week2); }
+    nav a:nth-child(3) { color: var(--week3); border: 1.5px solid var(--week3); }
+    nav a:nth-child(4) { color: var(--week4); border: 1.5px solid var(--week4); }
+    nav a:nth-child(5) { color: var(--week5); border: 1.5px solid var(--week5); }
+    
+    nav a:hover { color: white; }
+    nav a:nth-child(1):hover { background: var(--week1); }
+    nav a:nth-child(2):hover { background: var(--week2); }
+    nav a:nth-child(3):hover { background: var(--week3); }
+    nav a:nth-child(4):hover { background: var(--week4); }
+    nav a:nth-child(5):hover { background: var(--week5); }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+    /* WEEK SECTION */
+    .week-section { margin-bottom: 3.5rem; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 20px rgba(0,0,0,0.06); }
+    .week-header { padding: 1.4rem 2rem; color: white; display: flex; align-items: center; gap: 1rem; }
+    .week-header h2 { font-size: 1.4rem; font-weight: 800; }
+    .week-header .subtitle { opacity: 0.85; font-size: 0.95rem; }
+    .week-number { font-size: 2.5rem; font-weight: 900; opacity: 0.25; margin-left: auto; }
+    
+    #week1 .week-header { background: linear-gradient(90deg, #1e293b, var(--week1)); }
+    #week2 .week-header { background: linear-gradient(90deg, #c2410c, var(--week2)); }
+    #week3 .week-header { background: linear-gradient(90deg, #0369a1, var(--week3)); }
+    #week4 .week-header { background: linear-gradient(90deg, #6d28d9, var(--week4)); }
+    #week5 .week-header { background: linear-gradient(90deg, #047857, var(--week5)); }
+    .week-body { background: var(--card-bg); padding: 1.8rem 2rem; }
+
+    /* OVERVIEW */
+    .overview { background: var(--code-bg); border-left: 4px solid; padding: 1rem 1.2rem; border-radius: 0 8px 8px 0; margin-bottom: 1.8rem; font-size: 0.95rem; }
+    #week1 .overview { border-color: var(--week1); }
+    #week2 .overview { border-color: var(--week2); }
+    #week3 .overview { border-color: var(--week3); }
+    #week4 .overview { border-color: var(--week4); }
+    #week5 .overview { border-color: var(--week5); }
+    .overview strong { display: block; margin-bottom: 0.4rem; }
+
+    /* CONCEPT SECTION */
+    .concept-section { margin-top: 1.8rem; }
+    .concept-section > h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .concept-desc { font-size: 0.88rem; color: var(--text); margin-bottom: 0.8rem; line-height: 1.6; }
+    table.ref-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .ref-table th { background: var(--code-bg); padding: 0.6rem 0.8rem; text-align: left; font-weight: 700; border-bottom: 2px solid var(--border); }
+    .ref-table td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--border); }
+    .ref-table tr:last-child td { border-bottom: none; }
+    .ref-table tr:hover td { background: var(--code-bg); }
+    code { background: var(--code-bg); padding: 0.1rem 0.4rem; border-radius: 4px; font-family: 'Consolas', monospace; font-size: 0.85em; }
+
+    /* CODE + DEMO LAYOUT */
+    .demo-block { margin-top: 1.4rem; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .demo-block-title { font-size: 0.88rem; font-weight: 700; padding: 0.55rem 1rem; background: var(--code-bg); border-bottom: 1px solid var(--border); color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
+    .demo-block-title .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .demo-cols { display: grid; grid-template-columns: 52% 48%; }
+    @media(max-width:760px){ .demo-cols { grid-template-columns: 1fr; } }
+    @media(max-width:760px){ .demo-code { border-right: none; border-bottom: 1px solid #334155; } }
+    
+    /* TERMINAL STYLE CODE BLOCK */
+    .demo-code { background: #1e293b; color: #e2e8f0; padding: 1.2rem 1.4rem; font-family: 'Consolas', monospace; font-size: 0.88rem; line-height: 1.9; overflow-x: auto; border-right: 1px solid #334155; white-space: pre-wrap; word-break: break-word; }
+    .demo-code .cmd { color: #facc15; } /* Command yellow */
+    .demo-code .arg { color: #38bdf8; } /* Argument blue */
+    .demo-code .str { color: #a3e635; } /* String green */
+    .demo-code .cm  { color: #94a3b8; font-style: italic; }
+    
+    .demo-result { background: white; padding: 1.4rem 1.6rem; overflow: auto; display: flex; flex-direction: column; justify-content: center; }
+    .demo-label { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.7rem; }
+    
+    /* CUSTOM VISUALIZATIONS */
+    .term-output { font-family: 'Consolas', monospace; font-size: 0.85rem; color: #334155; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; border-left: 3px solid #94a3b8;}
+    .flow-box { display: inline-block; padding: 8px 12px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; text-align: center; }
+    .flow-arrow { color: #94a3b8; font-weight: bold; padding: 0 5px; }
+
+    footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.88rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Git & GitHub 핵심 개념 정리</h1>
+  <p>명령어 기반의 버전 관리 및 협업 도구 기초 (1주차 ~ 5주차)</p>
+  <div class="badges">
+    <span class="badge">Git Init</span>
+    <span class="badge">Commit</span>
+    <span class="badge">GitHub</span>
+    <span class="badge">Branch</span>
+    <span class="badge">Pull Request</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#week1">1주차 — 개념 기초</a>
+  <a href="#week2">2주차 — Git 기본</a>
+  <a href="#week3">3주차 — 상태 & 로그</a>
+  <a href="#week4">4주차 — 원격 저장소</a>
+  <a href="#week5">5주차 — 브랜치 & PR</a>
+</nav>
+
+<main>
+
+<section class="week-section" id="week1">
+  <div class="week-header">
+    <div>
+      <h2>1주차 — Git & GitHub 기초 개념</h2>
+      <div class="subtitle">버전 관리 시스템의 이해 · Git과 GitHub의 차이 · 핵심 동작 4단계</div>
+    </div>
+    <div class="week-number">01</div>
+  </div>
+
+  <div class="week-body">
+    <div class="overview">
+      <strong>주간 요약</strong>
+      Git은 내 컴퓨터에서 코드의 변경 이력을 기록하는 버전 관리 시스템이고, GitHub는 이를 온라인에 올려 협업할 수 있게 해주는 플랫폼입니다. 이 도구들의 차이점과 코드를 수정하고 업로드하는 전체적인 흐름을 이해하는 것이 1주차의 목표입니다.
+    </div>
+
+    <div class="concept-section">
+      <h3>Git, GitHub, Branch 란?</h3>
+      <p class="concept-desc">코드 관리부터 협업까지 필수적인 핵심 개념 3가지입니다.</p>
+      <table class="ref-table" style="margin-top: 10px;">
+        <tr><th>개념</th><th>설명</th></tr>
+        <tr><td><strong>📦 Git</strong></td><td>내 컴퓨터에서 코드의 변경 이력을 기록하고 관리하는 <strong>버전 관리 시스템</strong>입니다.</td></tr>
+        <tr><td><strong>☁️ GitHub</strong></td><td>Git으로 관리하는 프로젝트를 올리는 <strong>온라인 저장소</strong>이자 협업 플랫폼입니다.</td></tr>
+        <tr><td><strong>🌿 Branch</strong></td><td>기존 코드(main)와 분리되어 <strong>독립적으로 작업</strong>할 수 있는 공간입니다.</td></tr>
+      </table>
+    </div>
+
+    <div class="concept-section">
+      <h3>Git의 핵심 동작 흐름 4단계</h3>
+      <p class="concept-desc">파일을 처음 수정하고 GitHub라는 원격 저장소에 올리기까지의 가장 기본적인 4단계 과정입니다.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:var(--week1)"></span>전체 흐름 구조도</div>
+        <div style="padding: 1.5rem; text-align: center; background: white;">
+          <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; font-weight: bold; font-size: 0.95rem;">
+            <span class="flow-box" style="background:#f1f5f9; color:#334155; border:1px solid #94a3b8;">📄 Modify<br><span style="font-size: 0.75rem; font-weight: normal;">(파일 수정)</span></span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-box" style="background:#f1f5f9; color:#334155; border:1px solid #94a3b8;">🚩 Add<br><span style="font-size: 0.75rem; font-weight: normal;">(Stage 영역)</span></span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-box" style="background:#f1f5f9; color:#334155; border:1px solid #94a3b8;">💾 Commit<br><span style="font-size: 0.75rem; font-weight: normal;">(로컬 저장)</span></span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-box" style="background:#f1f5f9; color:#334155; border:1px solid #94a3b8;">🚀 Push<br><span style="font-size: 0.75rem; font-weight: normal;">(GitHub 업로드)</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="week-section" id="week2">
+  <div class="week-header">
+    <div>
+      <h2>2주차 — Git 기본 설정 및 필수 명령어</h2>
+      <div class="subtitle">개념 최소화 · 환경 설정 · add / commit / log 흐름</div>
+    </div>
+    <div class="week-number">02</div>
+  </div>
+
+  <div class="week-body">
+    <div class="overview">
+      <strong>주간 요약</strong>
+      Git은 단순한 "저장"이 아니라 파일 변경 이력을 관리하며 시간별 스냅샷을 남기는 도구입니다.
+      기본 사용자 정보를 설정하고, 필수 명령어 4개를 활용한 작업 흐름을 반복하는 것이 핵심입니다.
+    </div>
+
+    <div class="concept-section">
+      <h3>기본 설정 및 명령 구조</h3>
+      <p class="concept-desc">Git은 누가 작업했는지 기록하는 도구이므로 사용자 이름과 이메일 설정이 필수입니다. 명령어 기반 도구이며, 모를 때는 <code>git help</code>를 활용할 수 있습니다.</p>
+      <div class="demo-block">
+        <div class="demo-block-title">
+          <span class="dot" style="background:#f14e32"></span>
+          코드 &amp; 결과
+        </div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm"># 사용자 정보 설정</span>
+<span class="cmd">git config</span> <span class="arg">--global user.name</span> <span class="str">"이름"</span>
+<span class="cmd">git config</span> <span class="arg">--global user.email</span> <span class="str">"이메일"</span>
+
+<span class="cm"># 설정 확인</span>
+<span class="cmd">cat</span> ~/.gitconfig
+
+<span class="cm"># 도움말 확인</span>
+<span class="cmd">git help</span>
+<span class="cmd">git help</span> &lt;명령어&gt;</div>
+          <div class="demo-result">
+            <div class="demo-label">개념 이해하기</div>
+            <div class="term-output">
+              [user]<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;name = 홍길동<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;email = user@example.com
+            </div>
+            <p style="font-size:0.8rem; color:var(--muted); margin-top:8px;">
+              설정된 정보는 이후 생성되는 모든 커밋(Commit) 기록에 작성자로 남게 됩니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-section">
+      <h3>필수 명령어 4개와 작업 흐름</h3>
+      <p class="concept-desc"><code>commit</code>은 게임의 세이브 포인트처럼 "현재 상태 저장 + 설명"을 의미합니다. <strong>파일 수정 → add → commit</strong> 흐름을 반복하는 것이 Git 사용의 핵심입니다.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#facc15"></span>코드 &amp; 흐름 이해</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm"># 1. 저장소 시작</span>
+<span class="cmd">git init</span>
+
+<span class="cm"># 2. 파일 추가 (커밋 대기 상태로)</span>
+<span class="cmd">git add</span> .
+
+<span class="cm"># 3. 상태 저장 및 설명 추가</span>
+<span class="cmd">git commit</span> <span class="arg">-m</span> <span class="str">"메시지"</span>
+
+<span class="cm"># 4. 기록 확인</span>
+<span class="cmd">git log</span></div>
+          <div class="demo-result">
+            <div class="demo-label">작업 흐름 반복</div>
+            <div style="text-align: center; background: var(--code-bg); padding: 1.5rem; border-radius: 8px;">
+              <span class="flow-box" style="background:#fca5a5; color:#7f1d1d;">파일 수정</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-box" style="background:#bae6fd; color:#0369a1;">git add</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-box" style="background:#bbf7d0; color:#14532d;">git commit</span>
+              <div style="margin-top: 10px; font-size: 0.8rem; color: var(--muted); font-weight: bold;">
+                이 흐름을 반복!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="week-section" id="week3">
+  <div class="week-header">
+    <div>
+      <h2>3주차 — Git 상태 공간 및 협업 시작</h2>
+      <div class="subtitle">WD / Stage / Repo · git log 활용 · clone / pull</div>
+    </div>
+    <div class="week-number">03</div>
+  </div>
+
+  <div class="week-body">
+    <div class="overview">
+      <strong>주간 요약</strong>
+      파일이 존재하는 3가지 상태 공간(Working Directory, Staging Area, Repository)을 이해하는 것이 가장 중요합니다.
+      또한, Git은 기록을 보는 도구로서의 역할이 크며, <code>clone</code>과 <code>pull</code>을 통해 협업의 기본을 배웁니다.
+    </div>
+
+    <div class="concept-section">
+      <h3>Git 3가지 상태 공간 구조</h3>
+      <p class="concept-desc">하나의 파일이 수정된 버전과 스테이지된 버전 등 동시에 2개 상태로 존재할 수 있습니다. "Git은 저장이 아니라 상태 변화와 기록을 관리하는 시스템이다"라는 점을 기억해야 합니다.</p>
+      
+      <table class="ref-table" style="margin-top: 10px;">
+        <tr><th>상태 (공간)</th><th>의미</th></tr>
+        <tr><td><strong>Working Directory</strong></td><td>내가 현재 파일을 수정하고 작업하는 곳</td></tr>
+        <tr><td><strong>Staging Area</strong></td><td>커밋(저장) 대기 공간</td></tr>
+        <tr><td><strong>Repository</strong></td><td>완전히 저장된 기록 (Commit이 완료된 곳)</td></tr>
+      </table>
+    </div>
+
+    <div class="concept-section">
+      <h3>git log (기록 확인)</h3>
+      <p class="concept-desc">로그 기록에는 Commit ID, 작성자, 날짜, 메시지가 포함됩니다. 목적에 맞게 옵션을 추가해 기록을 효율적으로 확인할 수 있습니다.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#0ea5e9"></span>명령어 비교</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm"># 전체 기록 상세 보기</span>
+<span class="cmd">git log</span>
+
+<span class="cm"># 한 줄로 요약해서 보기</span>
+<span class="cmd">git log</span> <span class="arg">--oneline</span>
+
+<span class="cm"># 그래프 형태로 시각화하여 보기</span>
+<span class="cmd">git log</span> <span class="arg">--graph</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기 (개념적)</div>
+            <div class="term-output">
+              <span style="color:#ef4444">*</span> <span style="color:#eab308">a1b2c3d</span> (HEAD -> main) 세 번째 커밋<br>
+              <span style="color:#ef4444">*</span> <span style="color:#eab308">8f9e0a1</span> 두 번째 커밋 메시지<br>
+              <span style="color:#ef4444">*</span> <span style="color:#eab308">5d4c3b2</span> 첫 저장소 초기화
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-section">
+      <h3>clone과 pull (협업의 시작)</h3>
+      <p class="concept-desc">처음 프로젝트를 가져올 때는 <code>clone</code>, 이후 업데이트된 내용을 가져올 때는 <code>pull</code>을 사용합니다.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#0ea5e9"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm"># GitHub에서 내 컴퓨터로 가져오기</span>
+<span class="cmd">git clone</span> URL
+
+<span class="cm"># 이후 변경된 업데이트 내용 가져오기</span>
+<span class="cmd">git pull</span></div>
+          <div class="demo-result">
+            <div class="demo-label">핵심 차이</div>
+            <table class="ref-table" style="font-size:0.8rem;">
+              <tr><th>명령어</th><th>의미</th></tr>
+              <tr><td><code>clone</code></td><td>처음 가져오기</td></tr>
+              <tr><td><code>pull</code></td><td>업데이트 가져오기</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="week-section" id="week4">
+  <div class="week-header">
+    <div>
+      <h2>4주차 — 원격 저장소 (GitHub)</h2>
+      <div class="subtitle">로컬과 원격 · push 흐름 · 많이 하는 실수</div>
+    </div>
+    <div class="week-number">04</div>
+  </div>
+
+  <div class="week-body">
+    <div class="overview">
+      <strong>주간 요약</strong>
+      내 컴퓨터(로컬 저장소)와 GitHub(원격 저장소)의 개념을 연결합니다.
+      Git은 혼자 쓰는 것이 아니라 "공유"하려고 쓰는 도구임을 명심하며 push/pull 흐름을 익힙니다.
+    </div>
+
+    <div class="concept-section">
+      <h3>원격 저장소 연결 (clone과 remote)</h3>
+      <p class="concept-desc"><code>clone</code>을 하면 새로운 폴더와 <code>.git</code> 저장소가 생성되며 <code>git init</code>이 필요 없습니다. 또한 <code>origin</code>이라는 기본 원격 저장소 이름이 자동으로 생성되어 연결까지 끝난 상태가 됩니다.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#c4b5fd"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm"># 처음 복제하기</span>
+<span class="cmd">git clone</span> URL
+
+<span class="cm"># 원격 저장소 연결 상태 확인</span>
+<span class="cmd">git remote</span>
+<span class="cmd">git remote</span> <span class="arg">-v</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기 (remote -v)</div>
+            <div class="term-output">
+              origin  https://github.com/user/repo.git (fetch)<br>
+              origin  https://github.com/user/repo.git (push)
+            </div>
+            <p style="font-size:0.8rem; color:var(--muted); margin-top:8px;">
+              인증을 위해 GitHub는 비밀번호 대신 PAT(토큰)를 사용합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-section">
+      <h3>가장 중요한 push 흐름</h3>
+      <p class="concept-desc">내 작업 결과를 GitHub에 업로드하는 명령어입니다. <strong>Commit이 없으면 push를 할 수 없습니다.</strong> 또한, 충돌 방지를 위해 항상 작업 전에는 <code>pull</code>을 먼저 해야 합니다.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#c4b5fd"></span>코드 &amp; 흐름</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm"># 1. 파일 수정 후 추가 및 커밋</span>
+<span class="cmd">git add</span> .
+<span class="cmd">git commit</span> <span class="arg">-m</span> <span class="str">"수정"</span>
+
+<span class="cm"># 2. GitHub에 업로드</span>
+<span class="cmd">git push</span></div>
+          <div class="demo-result">
+            <div class="demo-label">전체 실습 흐름 요약</div>
+            <div style="font-weight:bold; color:var(--text); text-align:center; padding: 10px; background: #f3f4f6; border-radius: 8px;">
+              clone <span style="color:#94a3b8">→</span> 작업 <span style="color:#94a3b8">→</span> commit <span style="color:#94a3b8">→</span> push
+            </div>
+            <div style="margin-top: 15px;">
+              <div class="demo-label" style="color:#b91c1c">초보자가 많이 하는 실수</div>
+              <ul style="font-size:0.85rem; padding-left: 1.2rem; color:#b91c1c;">
+                <li><strong>pull 안 하고 작업:</strong> 충돌 발생 가능</li>
+                <li><strong>commit 안 하고 push:</strong> 업로드 안 됨</li>
+                <li><strong>clone 안 하고 init:</strong> 원격 연결 안 됨</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="week-section" id="week5">
+  <div class="week-header">
+    <div>
+      <h2>5주차 — 브랜치(Branch)와 협업(PR)</h2>
+      <div class="subtitle">작업 공간 분리 · PR 요청 · Merge 흐름</div>
+    </div>
+    <div class="week-number">05</div>
+  </div>
+
+  <div class="week-body">
+    <div class="overview">
+      <strong>주간 요약</strong>
+      안전한 협업을 위해 <code>main</code> 브랜치는 직접 건드리지 않고, 새로운 브랜치를 만들어 독립된 공간에서 작업합니다.
+      작업 완료 후 PR(Pull Request)을 통해 합쳐달라고 검토를 요청하는 것이 협업의 핵심입니다.
+    </div>
+
+    <div class="concept-section">
+      <h3>브랜치(Branch) 생성 및 이동</h3>
+      <p class="concept-desc">브랜치별로 작업을 분리하면 충돌을 감소시킬 수 있습니다. 브랜치를 만들고 반드시 그 안으로 이동(checkout)하여 작업해야 합니다.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#10b981"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm"># 브랜치 생성 후 이동</span>
+<span class="cmd">git branch</span> feature1
+<span class="cmd">git checkout</span> feature1
+
+<span class="cm"># 위 두 명령어를 한 번에 실행</span>
+<span class="cmd">git checkout</span> <span class="arg">-b</span> feature1
+
+<span class="cm"># 작업 후 브랜치 이름으로 push</span>
+<span class="cmd">git push</span> origin feature1</div>
+          <div class="demo-result">
+            <div class="demo-label">협업 개념 요약</div>
+            <table class="ref-table" style="font-size:0.8rem;">
+              <tr><th>개념</th><th>의미</th></tr>
+              <tr><td><strong>branch</strong></td><td>작업 공간 분리</td></tr>
+              <tr><td><strong>push</strong></td><td>작업 업로드</td></tr>
+              <tr><td><strong>PR</strong></td><td>합쳐달라고 요청 (Merge 요청)</td></tr>
+              <tr><td><strong>merge</strong></td><td>실제 반영</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-section">
+      <h3>PR (Pull Request) 과 전체 흐름</h3>
+      <p class="concept-desc">PR은 GitHub에서 "이 작업을 main에 합쳐주세요"라고 검토를 요청하는 과정입니다. 기존의 복잡한 Fork 방식보다 Branch + PR 방식이 초보자에게 더 쉽고 추천됩니다.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#10b981"></span>전체 한 줄 흐름 (학생용 암기)</div>
+        <div style="padding: 1.5rem; text-align: center; background: white;">
+          <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; font-weight: bold; font-size: 0.95rem;">
+            <span class="flow-box" style="background:#dcfce7; color:#166534; border:1px solid #22c55e;">브랜치 만들기</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-box" style="background:#dcfce7; color:#166534; border:1px solid #22c55e;">작업 (add/commit)</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-box" style="background:#dbeafe; color:#1e40af; border:1px solid #3b82f6;">push</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-box" style="background:#f3e8ff; color:#6b21a8; border:1px solid #a855f7;">PR (요청)</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-box" style="background:#fee2e2; color:#b91c1c; border:1px solid #ef4444;">merge (반영)</span>
+          </div>
+          <p style="margin-top: 15px; font-size: 0.85rem; color: var(--muted);">
+            이 전체 흐름을 이해하는 것이 5주차 협업 과정의 최종 목표입니다.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>Git 강의 자료 정리 (1~5주차) &nbsp;|&nbsp; 기초 명령어부터 브랜치 협업까지</p>
+</footer>
+
+</body>
+</html>
