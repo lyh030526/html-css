@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>웹프로그래밍 1~4주차 정리</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --code-bg: #f1f5f9;
+      --week1: #0ea5e9;
+      --week2: #10b981;
+      --week3: #f59e0b;
+      --week4: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+    /* HEADER */
+    header { background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%); color: white; padding: 3rem 2rem 2.5rem; text-align: center; }
+    header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; }
+    header p  { margin-top: 0.6rem; opacity: 0.85; font-size: 1.05rem; }
+    .badges { display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { padding: 0.3rem 0.9rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; background: white; border-bottom: 1px solid var(--border); display: flex; justify-content: center; gap: 0.5rem; padding: 0.7rem 1rem; flex-wrap: wrap; }
+    nav a { padding: 0.4rem 1.1rem; border-radius: 999px; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+    nav a:nth-child(1) { color: var(--week1); border: 1.5px solid var(--week1); }
+    nav a:nth-child(2) { color: var(--week2); border: 1.5px solid var(--week2); }
+    nav a:nth-child(3) { color: var(--week3); border: 1.5px solid var(--week3); }
+    nav a:nth-child(4) { color: var(--week4); border: 1.5px solid var(--week4); }
+    nav a:hover { color: white; }
+    nav a:nth-child(1):hover { background: var(--week1); }
+    nav a:nth-child(2):hover { background: var(--week2); }
+    nav a:nth-child(3):hover { background: var(--week3); }
+    nav a:nth-child(4):hover { background: var(--week4); }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+    /* WEEK SECTION */
+    .week-section { margin-bottom: 3.5rem; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 20px rgba(0,0,0,0.06); }
+    .week-header { padding: 1.4rem 2rem; color: white; display: flex; align-items: center; gap: 1rem; }
+    .week-header h2 { font-size: 1.4rem; font-weight: 800; }
+    .week-header .subtitle { opacity: 0.85; font-size: 0.95rem; }
+    .week-number { font-size: 2.5rem; font-weight: 900; opacity: 0.25; margin-left: auto; }
+    #week1 .week-header { background: linear-gradient(90deg, #0369a1, var(--week1)); }
+    #week2 .week-header { background: linear-gradient(90deg, #047857, var(--week2)); }
+    #week3 .week-header { background: linear-gradient(90deg, #b45309, var(--week3)); }
+    #week4 .week-header { background: linear-gradient(90deg, #b91c1c, var(--week4)); }
+    .week-body { background: var(--card-bg); padding: 1.8rem 2rem; }
+
+    /* OVERVIEW */
+    .overview { background: var(--code-bg); border-left: 4px solid; padding: 1rem 1.2rem; border-radius: 0 8px 8px 0; margin-bottom: 1.8rem; font-size: 0.95rem; }
+    #week1 .overview { border-color: var(--week1); }
+    #week2 .overview { border-color: var(--week2); }
+    #week3 .overview { border-color: var(--week3); }
+    #week4 .overview { border-color: var(--week4); }
+    .overview strong { display: block; margin-bottom: 0.4rem; }
+
+    /* FILE CARDS */
+    .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .file-card { border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.2rem; background: var(--bg); transition: box-shadow 0.2s; }
+    .file-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+    .file-card .file-name { font-size: 0.82rem; font-weight: 700; font-family: 'Consolas', monospace; padding: 0.2rem 0.6rem; border-radius: 4px; display: inline-block; margin-bottom: 0.5rem; color: white; }
+    #week1 .file-card .file-name { background: var(--week1); }
+    #week2 .file-card .file-name { background: var(--week2); }
+    #week3 .file-card .file-name { background: var(--week3); }
+    #week4 .file-card .file-name { background: var(--week4); }
+    .file-card h4 { font-size: 0.97rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .file-card p  { font-size: 0.88rem; color: var(--muted); }
+
+    /* CONCEPT SECTION */
+    .concept-section { margin-top: 1.8rem; }
+    .concept-section > h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .concept-desc { font-size: 0.88rem; color: var(--text); margin-bottom: 0.8rem; line-height: 1.6; }
+    table.ref-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .ref-table th { background: var(--code-bg); padding: 0.6rem 0.8rem; text-align: left; font-weight: 700; border-bottom: 2px solid var(--border); }
+    .ref-table td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--border); }
+    .ref-table tr:last-child td { border-bottom: none; }
+    .ref-table tr:hover td { background: var(--code-bg); }
+    code { background: var(--code-bg); padding: 0.1rem 0.4rem; border-radius: 4px; font-family: 'Consolas', monospace; font-size: 0.85em; }
+
+    /* CODE + DEMO LAYOUT */
+    .demo-block { margin-top: 1.4rem; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .demo-block-title { font-size: 0.88rem; font-weight: 700; padding: 0.55rem 1rem; background: var(--code-bg); border-bottom: 1px solid var(--border); color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
+    .demo-block-title .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .demo-cols { display: grid; grid-template-columns: 52% 48%; }
+    @media(max-width:760px){ .demo-cols { grid-template-columns: 1fr; } }
+    @media(max-width:760px){ .demo-code { border-right: none; border-bottom: 1px solid #334155; } }
+    .demo-code { background: #1e293b; color: #e2e8f0; padding: 1.2rem 1.4rem; font-family: 'Consolas', monospace; font-size: 0.88rem; line-height: 1.9; overflow-x: auto; border-right: 1px solid #334155; white-space: pre-wrap; word-break: break-word; }
+    .demo-code .kw  { color: #93c5fd; }
+    .demo-code .tag { color: #f9a8d4; }
+    .demo-code .atr { color: #86efac; }
+    .demo-code .val { color: #fde68a; }
+    .demo-code .cm  { color: #94a3b8; font-style: italic; }
+    .demo-result { background: white; padding: 1.4rem 1.6rem; overflow: auto; }
+    .demo-label { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.7rem; }
+
+    footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.88rem; }
+
+    /* =====================================================
+       1주차 데모 전용 스타일 (프리픽스: w1-)
+    ===================================================== */
+    .w1-text-demo p { margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .w1-text-demo p:last-child { margin-bottom: 0; }
+
+    .w1-list-demo { display: flex; gap: 2rem; flex-wrap: wrap; font-size: 0.9rem; }
+    .w1-list-demo ul, .w1-list-demo ol { padding-left: 1.4rem; }
+    .w1-list-demo dl dt { font-weight: 700; }
+    .w1-list-demo dl dd { margin-left: 1rem; color: var(--muted); }
+
+    .w1-form-demo { display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.9rem; }
+    .w1-form-demo label { font-weight: 600; font-size: 0.85rem; color: var(--muted); }
+    .w1-form-demo input, .w1-form-demo select, .w1-form-demo textarea {
+      padding: 0.35rem 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.9rem; width: 100%; max-width: 260px;
+    }
+    .w1-form-demo button { padding: 0.4rem 1rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; width: fit-content; }
+    .w1-input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .w1-input-grid span { font-size: 0.78rem; color: var(--muted); }
+
+    /* =====================================================
+       2주차 데모 전용 스타일 (프리픽스: w2-)
+    ===================================================== */
+    .w2-display-demo { font-size: 0.85rem; }
+    .w2-block-box { background: #bae6fd; border: 2px solid #0ea5e9; padding: 0.4rem 0.7rem; margin-bottom: 6px; width: 100%; }
+    .w2-inline-box { background: #bbf7d0; border: 2px solid #22c55e; padding: 0.4rem 0.7rem; display: inline; }
+    .w2-inline-block-box { background: #fde68a; border: 2px solid #f59e0b; padding: 0.4rem 0.7rem; display: inline-block; width: 80px; height: 50px; text-align: center; line-height: 1.2; font-size: 0.8rem; vertical-align: top; }
+
+    .w2-pos-demo { position: relative; background: #e0f2fe; border: 2px dashed #0ea5e9; height: 160px; width: 100%; border-radius: 6px; font-size: 0.78rem; }
+    .w2-pos-label { position: absolute; top: 4px; left: 8px; font-size: 0.72rem; color: #0369a1; font-weight: 700; }
+    .w2-pos-normal   { background: #bae6fd; border: 1px solid #0ea5e9; padding: 0.3rem 0.6rem; position: absolute; top: 20px; left: 10px; border-radius: 4px; white-space: nowrap; }
+    .w2-pos-relative { background: #86efac; border: 1px solid #22c55e; padding: 0.3rem 0.6rem; position: absolute; top: 60px; left: 80px; border-radius: 4px; white-space: nowrap; }
+    .w2-pos-absolute { background: #fca5a5; border: 1px solid #ef4444; padding: 0.3rem 0.6rem; position: absolute; bottom: 12px; right: 12px; border-radius: 4px; white-space: nowrap; }
+
+    .w2-zindex-demo { position: relative; height: 110px; width: 260px; }
+    .w2-zbox { position: absolute; width: 80px; height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; border-radius: 8px; gap: 2px; }
+    .w2-zbox.r { background: #fca5a5; color: #7f1d1d; top: 20px; left: 0px;  z-index: 1;  border: 2px solid #ef4444; }
+    .w2-zbox.b { background: #93c5fd; color: #1e3a5f; top: 0px;  left: 50px; z-index: 30; border: 2px solid #3b82f6; }
+    .w2-zbox.g { background: #86efac; color: #14532d; top: 30px; left: 100px;z-index: 20; border: 2px solid #22c55e; }
+
+    .w2-float-demo { overflow: hidden; font-size: 0.88rem; background: #f0fdf4; padding: 0.8rem; border-radius: 6px; border: 1px solid #bbf7d0; }
+    .w2-float-box { background: #86efac; border: 2px solid #22c55e; padding: 0.5rem 0.7rem; float: left; margin-right: 10px; margin-bottom: 4px; }
+
+    .w2-border-demo { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .w2-bx { width: 60px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; text-align: center; }
+
+    .w2-vis-demo { display: flex; flex-direction: column; gap: 1rem; font-size: 0.85rem; }
+    .w2-vis-row  { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .w2-vis-box  { width: 80px; height: 44px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; }
+
+    /* =====================================================
+       3주차 데모 전용 스타일 (프리픽스: w3-)
+    ===================================================== */
+    .w3-list-types { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; font-size: 0.88rem; }
+    .w3-list-types h5 { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.3rem; }
+    .w3-nav-demo { background: #3f3f46; padding: 0.5rem 1rem; border-radius: 6px; }
+    .w3-nav-demo ul { list-style: none; padding: 0; }
+    .w3-nav-demo li { display: inline-block; }
+    .w3-nav-demo a { color: #e4e4e7; text-decoration: none; padding: 0.4rem 0.8rem; display: inline-block; font-size: 0.88rem; border-radius: 4px; transition: color 0.2s; }
+    .w3-nav-demo a:hover { color: #c084fc; }
+    .w3-table-demo { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .w3-table-demo caption { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.4rem; font-weight: 600; }
+    .w3-table-demo thead tr { background: #334155; color: #fbbf24; }
+    .w3-table-demo tfoot tr { background: var(--code-bg); font-weight: 700; }
+    .w3-table-demo th, .w3-table-demo td { padding: 0.45rem 0.7rem; border: 1px solid var(--border); }
+    .w3-table-demo tbody tr:nth-child(even) { background: #dbeafe; }
+    .w3-table-demo tbody tr:hover { background: #fce7f3; }
+
+    /* =====================================================
+       4주차 데모 전용 스타일 (프리픽스: w4-)
+    ===================================================== */
+    .w4-transform-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.8rem; text-align: center; }
+    @media(max-width:600px){ .w4-transform-grid { grid-template-columns: repeat(2,1fr); } }
+    .w4-transform-grid > div { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+    .w4-transform-grid h5 { font-size: 0.78rem; color: var(--muted); }
+    .w4-box { width: 70px; height: 70px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; cursor: pointer; transition: all 0.35s ease; }
+    .w4-translate { background: #ec4899; }
+    .w4-translate:hover { transform: translate(20px, 20px); background: #be185d; }
+    .w4-scale { background: #f59e0b; }
+    .w4-scale:hover { transform: scale(1.5); background: #b45309; }
+    .w4-rotate { background: #3b82f6; }
+    .w4-rotate:hover { transform: rotate(45deg); background: #1d4ed8; }
+    .w4-skew { background: #22c55e; }
+    .w4-skew:hover { transform: skew(20deg, 5deg); background: #15803d; }
+
+    .w4-anim-area { display: flex; flex-direction: column; gap: 1.2rem; padding: 0.5rem 0; }
+    .w4-anim-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.3rem; }
+
+    .w4-moving-box {
+      width: 60px; height: 60px; background: #1e293b; border-radius: 6px;
+      animation: w4moveRight 2s infinite alternate ease-in-out;
+    }
+    @keyframes w4moveRight {
+      0%   { margin-left: 0; }
+      100% { margin-left: calc(100% - 60px); }
+    }
+
+    .w4-flying-box {
+      width: 60px; height: 60px; background: #f9a8d4; border-radius: 6px;
+      animation: w4fly 2s infinite alternate ease-in-out;
+    }
+    @keyframes w4fly {
+      0%   { margin-left: 0; border-radius: 6px; background: #f9a8d4; }
+      100% { margin-left: calc(100% - 60px); border-radius: 50%; background: #fb7185; }
+    }
+
+    .w4-ball {
+      width: 60px; height: 60px; background: #93c5fd; border-radius: 50%;
+      animation: w4fall 1s infinite alternate ease-in;
+    }
+    @keyframes w4fall {
+      0%   { margin-top: 0;    height: 60px; width: 60px; }
+      100% { margin-top: 60px; height: 35px; width: 75px; }
+    }
+    .w4-anim-track { background: var(--code-bg); border-radius: 8px; padding: 0.8rem; overflow: hidden; height: 90px; position: relative; display: flex; align-items: flex-start; }
+    .w4-ball-track { height: 155px; background: var(--code-bg); border-radius: 8px; padding: 0.8rem; overflow: hidden; }
+
+    .w4-hint { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <h1>웹프로그래밍 1~4주차 정리</h1>
+  <p>HTML5 · CSS3 기초부터 애니메이션까지 — 코드와 실행 결과 나란히 보기</p>
+  <div class="badges">
+    <span class="badge">HTML5</span>
+    <span class="badge">CSS3</span>
+    <span class="badge">Layout</span>
+    <span class="badge">Animation</span>
+    <span class="badge">Transform</span>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <a href="#week1">1주차 — HTML 태그</a>
+  <a href="#week2">2주차 — CSS 배치</a>
+  <a href="#week3">3주차 — 목록 & 표</a>
+  <a href="#week4">4주차 — 애니메이션</a>
+</nav>
+
+<main>
+
+<!-- ================================================================
+     1주차
+================================================================ -->
+<section class="week-section" id="week1">
+  <div class="week-header">
+    <div>
+      <h2>1주차 — HTML5 기본 태그</h2>
+      <div class="subtitle">텍스트 서식 · 폼 · 입력 요소 · 시멘틱 구조</div>
+    </div>
+    <div class="week-number">01</div>
+  </div>
+
+  <div class="week-body">
+    <div class="overview">
+      <strong>주간 요약</strong>
+      HTML5의 다양한 태그를 실습하며 웹 문서의 구조를 이해합니다.
+      텍스트 서식 태그, 목록, 표, 입력 양식(form), 시멘틱 요소까지 폭넓게 다룹니다.
+    </div>
+
+    <!-- ── 텍스트 서식 태그 ── -->
+    <div class="concept-section">
+      <h3>텍스트 서식 태그</h3>
+      <p class="concept-desc"><code>strong</code>/<code>em</code>은 의미론적 강조(스크린리더가 읽음), <code>b</code>/<code>i</code>는 시각적 효과만. <code>mark</code>는 형광 하이라이트, <code>sub</code>/<code>sup</code>은 아래/위 첨자, <code>blockquote</code>는 인용문 들여쓰기, <code>pre</code>는 공백·줄바꿈을 입력 그대로 출력.</p>
+      <div class="demo-block">
+        <div class="demo-block-title">
+          <span class="dot" style="background:#f9a8d4"></span>
+          코드
+          <span style="margin-left:auto;color:#64748b;font-weight:400">→ 오른쪽이 실제 브라우저 결과</span>
+        </div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">&lt;!-- 강조 --&gt;</span>
+<span class="tag">&lt;strong&gt;</span>굵게(strong)<span class="tag">&lt;/strong&gt;</span>
+<span class="tag">&lt;b&gt;</span>굵게(b)<span class="tag">&lt;/b&gt;</span>
+<span class="tag">&lt;em&gt;</span>기울임(em)<span class="tag">&lt;/em&gt;</span>
+<span class="tag">&lt;i&gt;</span>기울임(i)<span class="tag">&lt;/i&gt;</span>
+
+<span class="cm">&lt;!-- 표시 --&gt;</span>
+<span class="tag">&lt;mark&gt;</span>형광 하이라이트<span class="tag">&lt;/mark&gt;</span>
+<span class="tag">&lt;code&gt;</span>인라인 코드<span class="tag">&lt;/code&gt;</span>
+<span class="tag">&lt;s&gt;</span>취소선<span class="tag">&lt;/s&gt;</span>
+<span class="tag">&lt;u&gt;</span>밑줄<span class="tag">&lt;/u&gt;</span>
+
+<span class="cm">&lt;!-- 첨자 --&gt;</span>
+H<span class="tag">&lt;sub&gt;</span>2<span class="tag">&lt;/sub&gt;</span>O  /  x<span class="tag">&lt;sup&gt;</span>2<span class="tag">&lt;/sup&gt;</span>
+
+<span class="cm">&lt;!-- 인용 --&gt;</span>
+<span class="tag">&lt;blockquote&gt;</span>인용문 텍스트<span class="tag">&lt;/blockquote&gt;</span>
+<span class="tag">&lt;pre&gt;</span>  공백   유지<span class="tag">&lt;/pre&gt;</span>
+<span class="tag">&lt;hr&gt;</span>  <span class="cm">&lt;!-- 수평선 --&gt;</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <div class="w1-text-demo">
+              <p><strong>굵게(strong)</strong> &nbsp; <b>굵게(b)</b> &nbsp; <em>기울임(em)</em> &nbsp; <i>기울임(i)</i></p>
+              <p><mark>형광 하이라이트</mark> &nbsp; <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-family:monospace">인라인 코드</code></p>
+              <p><s>취소선</s> &nbsp; <u>밑줄</u></p>
+              <p>H<sub>2</sub>O &nbsp;/&nbsp; x<sup>2</sup></p>
+              <blockquote style="border-left:3px solid #cbd5e1;padding-left:0.8rem;color:#64748b;margin:0.5rem 0;font-style:italic">인용문 텍스트</blockquote>
+              <pre style="background:#f1f5f9;padding:0.4rem 0.7rem;border-radius:4px;font-size:0.85rem">  공백   유지</pre>
+              <hr style="margin:0.5rem 0;border:none;border-top:1px solid #cbd5e1">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 제목 태그 h1~h6 ── -->
+    <div class="concept-section">
+      <h3>제목 태그 h1 ~ h6</h3>
+      <p class="concept-desc"><code>h1</code>이 가장 크고 <code>h6</code>이 가장 작음. 문서 구조를 계층적으로 표현하며 SEO(검색엔진 최적화)에도 영향을 줌. 한 페이지에 <code>h1</code>은 하나만 쓰는 것이 권장됨.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#86efac"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="tag">&lt;h1&gt;</span>제목 1 (가장 큼)<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;h2&gt;</span>제목 2<span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;h3&gt;</span>제목 3<span class="tag">&lt;/h3&gt;</span>
+<span class="tag">&lt;h4&gt;</span>제목 4<span class="tag">&lt;/h4&gt;</span>
+<span class="tag">&lt;h5&gt;</span>제목 5<span class="tag">&lt;/h5&gt;</span>
+<span class="tag">&lt;h6&gt;</span>제목 6 (가장 작음)<span class="tag">&lt;/h6&gt;</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <div style="display:flex;flex-direction:column;gap:0.5rem">
+              <h1 style="font-size:1.9rem;font-weight:900;line-height:1.2;margin:0;color:#0f172a">&lt;h1&gt; 제목 1 — 가장 큼</h1>
+              <h2 style="font-size:1.45rem;font-weight:800;line-height:1.2;margin:0;color:#1e293b">&lt;h2&gt; 제목 2</h2>
+              <h3 style="font-size:1.2rem;font-weight:700;line-height:1.2;margin:0;color:#334155">&lt;h3&gt; 제목 3</h3>
+              <h4 style="font-size:1rem;font-weight:700;line-height:1.2;margin:0;color:#475569">&lt;h4&gt; 제목 4</h4>
+              <h5 style="font-size:0.9rem;font-weight:600;line-height:1.2;margin:0;color:#64748b">&lt;h5&gt; 제목 5</h5>
+              <h6 style="font-size:0.82rem;font-weight:600;line-height:1.2;margin:0;color:#94a3b8">&lt;h6&gt; 제목 6 — 가장 작음</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── p 태그 ── -->
+    <div class="concept-section">
+      <h3>p 태그 — 단락(Paragraph)</h3>
+      <p class="concept-desc"><code>p</code>는 하나의 문단을 나타내는 블록 요소. 위아래에 자동으로 여백(margin)이 생기며, 연속으로 써도 각각 독립된 단락으로 분리됨. 줄바꿈이 필요할 때 <code>br</code>을 쓰는 것과 달리, <code>p</code>는 의미론적 단락 구분에 사용.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#86efac"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="tag">&lt;p&gt;</span>첫 번째 단락입니다.
+줄바꿈을 해도 한 단락입니다.<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;p&gt;</span>두 번째 단락입니다.
+p 태그 사이에 자동 여백이 생깁니다.<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;p&gt;</span>세 번째 단락.<span class="tag">&lt;/p&gt;</span>
+
+<span class="cm">&lt;!-- p 안에서 줄바꿈하려면 br --&gt;</span>
+<span class="tag">&lt;p&gt;</span>한 단락 안에서<span class="tag">&lt;br&gt;</span>줄바꿈은 br 사용<span class="tag">&lt;/p&gt;</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <p style="margin:0 0 0.8rem;font-size:0.9rem">첫 번째 단락입니다. 줄바꿈을 해도 한 단락입니다.</p>
+            <p style="margin:0 0 0.8rem;font-size:0.9rem">두 번째 단락입니다. p 태그 사이에 자동 여백이 생깁니다.</p>
+            <p style="margin:0 0 0.8rem;font-size:0.9rem">세 번째 단락.</p>
+            <p style="margin:0;font-size:0.9rem">한 단락 안에서<br>줄바꿈은 br 사용</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 추가 텍스트 태그 ── -->
+    <div class="concept-section">
+      <h3>추가 텍스트 태그 (br · span · kbd · abbr · cite · ruby)</h3>
+      <p class="concept-desc"><code>br</code>은 줄바꿈(빈 태그), <code>span</code>은 인라인 컨테이너(CSS 적용 범위 지정용), <code>kbd</code>는 키보드 입력 표시, <code>abbr</code>은 약어에 title 속성으로 툴팁 제공, <code>cite</code>는 인용 출처(기울임), <code>ruby</code>/<code>rt</code>는 한자·외국어 발음 주석.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#a5f3fc"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">&lt;!-- 줄바꿈 --&gt;</span>
+첫 줄<span class="tag">&lt;br&gt;</span>두 번째 줄
+
+<span class="cm">&lt;!-- 인라인 컨테이너 --&gt;</span>
+<span class="tag">&lt;span <span class="atr">style</span>=<span class="val">"color:red"</span>&gt;</span>빨간 글자<span class="tag">&lt;/span&gt;</span>
+
+<span class="cm">&lt;!-- 키보드 입력 --&gt;</span>
+<span class="tag">&lt;kbd&gt;</span>Ctrl + S<span class="tag">&lt;/kbd&gt;</span>
+
+<span class="cm">&lt;!-- 약어 + 툴팁 --&gt;</span>
+<span class="tag">&lt;abbr <span class="atr">title</span>=<span class="val">"HyperText Markup Language"</span>&gt;</span>HTML<span class="tag">&lt;/abbr&gt;</span>
+
+<span class="cm">&lt;!-- 인용 출처 --&gt;</span>
+<span class="tag">&lt;cite&gt;</span>위대한 개츠비<span class="tag">&lt;/cite&gt;</span>
+
+<span class="cm">&lt;!-- 발음 주석 --&gt;</span>
+<span class="tag">&lt;ruby&gt;</span>愛<span class="tag">&lt;rt&gt;</span>사랑<span class="tag">&lt;/rt&gt;&lt;/ruby&gt;</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.92rem">
+              <div><span style="font-size:0.78rem;color:#64748b">br:</span> 첫 줄<br>두 번째 줄</div>
+              <div><span style="font-size:0.78rem;color:#64748b">span:</span> 일반 텍스트 <span style="color:red">빨간 글자</span> 계속</div>
+              <div><span style="font-size:0.78rem;color:#64748b">kbd:</span> <kbd style="background:#e2e8f0;border:1px solid #94a3b8;border-radius:4px;padding:2px 6px;font-size:0.85rem;font-family:monospace">Ctrl + S</kbd></div>
+              <div><span style="font-size:0.78rem;color:#64748b">abbr:</span> <abbr title="HyperText Markup Language" style="border-bottom:1px dotted #64748b;cursor:help">HTML</abbr> (마우스 올리면 툴팁)</div>
+              <div><span style="font-size:0.78rem;color:#64748b">cite:</span> <cite style="font-style:italic">위대한 개츠비</cite></div>
+              <div><span style="font-size:0.78rem;color:#64748b">ruby:</span> <ruby>愛<rt style="font-size:0.7rem">사랑</rt></ruby></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 목록 태그 ── -->
+    <div class="concept-section">
+      <h3>목록 태그 ul / ol / dl</h3>
+      <p class="concept-desc"><code>ul</code>은 순서 없는 목록(불릿 마커), <code>ol</code>은 순서 있는 목록(번호), <code>dl</code>은 용어-정의 쌍으로 이루어진 정의형 목록(<code>dt</code>=용어, <code>dd</code>=설명).</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#fde68a"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">&lt;!-- 비순서 목록 --&gt;</span>
+<span class="tag">&lt;ul&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Espresso<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Cappuccino<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Cafe Latte<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ul&gt;</span>
+
+<span class="cm">&lt;!-- 순서 목록 --&gt;</span>
+<span class="tag">&lt;ol&gt;</span>
+  <span class="tag">&lt;li&gt;</span>HTML 배우기<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>CSS 배우기<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>JS 배우기<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ol&gt;</span>
+
+<span class="cm">&lt;!-- 정의 목록 --&gt;</span>
+<span class="tag">&lt;dl&gt;</span>
+  <span class="tag">&lt;dt&gt;</span>HTML<span class="tag">&lt;/dt&gt;</span>
+  <span class="tag">&lt;dd&gt;</span>문서 구조 언어<span class="tag">&lt;/dd&gt;</span>
+  <span class="tag">&lt;dt&gt;</span>CSS<span class="tag">&lt;/dt&gt;</span>
+  <span class="tag">&lt;dd&gt;</span>스타일 언어<span class="tag">&lt;/dd&gt;</span>
+<span class="tag">&lt;/dl&gt;</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <div class="w1-list-demo">
+              <div>
+                <p style="font-size:0.8rem;font-weight:700;color:#64748b;margin-bottom:4px">ul (비순서)</p>
+                <ul style="padding-left:1.3rem;font-size:0.9rem">
+                  <li>Espresso</li>
+                  <li>Cappuccino</li>
+                  <li>Cafe Latte</li>
+                </ul>
+              </div>
+              <div>
+                <p style="font-size:0.8rem;font-weight:700;color:#64748b;margin-bottom:4px">ol (순서)</p>
+                <ol style="padding-left:1.3rem;font-size:0.9rem">
+                  <li>HTML 배우기</li>
+                  <li>CSS 배우기</li>
+                  <li>JS 배우기</li>
+                </ol>
+              </div>
+              <div>
+                <p style="font-size:0.8rem;font-weight:700;color:#64748b;margin-bottom:4px">dl (정의)</p>
+                <dl style="font-size:0.9rem">
+                  <dt style="font-weight:700">HTML</dt>
+                  <dd style="margin-left:1rem;color:#64748b">문서 구조 언어</dd>
+                  <dt style="font-weight:700">CSS</dt>
+                  <dd style="margin-left:1rem;color:#64748b">스타일 언어</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ol type/start + figure ── -->
+    <div class="concept-section">
+      <h3>ol 속성 (type · start) & figure/figcaption</h3>
+      <p class="concept-desc"><code>ol</code>의 <code>type</code> 속성으로 마커 종류(1·A·a·I·i) 지정, <code>start</code>로 시작 번호 변경 가능. <code>figure</code>는 이미지·코드·표 등을 캡션(<code>figcaption</code>)과 함께 의미론적으로 묶는 태그.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#fde68a"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">&lt;!-- ol: type으로 마커 유형, start로 시작값 --&gt;</span>
+<span class="tag">&lt;ol <span class="atr">type</span>=<span class="val">"A"</span> <span class="atr">start</span>=<span class="val">"3"</span>&gt;</span>
+  <span class="tag">&lt;li&gt;</span>CSS<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>JavaScript<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ol&gt;</span>
+<span class="cm">&lt;!-- type: 1, A, a, I, i --&gt;</span>
+
+<span class="cm">&lt;!-- figure: 이미지 + 캡션 묶기 --&gt;</span>
+<span class="tag">&lt;figure&gt;</span>
+  <span class="tag">&lt;img <span class="atr">src</span>=<span class="val">"cat.jpg"</span>&gt;</span>
+  <span class="tag">&lt;figcaption&gt;</span>고양이 사진<span class="tag">&lt;/figcaption&gt;</span>
+<span class="tag">&lt;/figure&gt;</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <div style="display:flex;gap:2rem;flex-wrap:wrap;font-size:0.9rem">
+              <div>
+                <p style="font-size:0.78rem;color:#64748b;margin-bottom:4px">ol type="A" start="3"</p>
+                <ol type="A" start="3" style="padding-left:1.5rem"><li>CSS</li><li>JavaScript</li></ol>
+                <p style="font-size:0.78rem;color:#64748b;margin-top:8px;margin-bottom:4px">ol type="I"</p>
+                <ol type="I" style="padding-left:1.5rem"><li>HTML</li><li>CSS</li></ol>
+                <p style="font-size:0.78rem;color:#64748b;margin-top:8px;margin-bottom:4px">ol type="a"</p>
+                <ol type="a" style="padding-left:1.5rem"><li>HTML</li><li>CSS</li></ol>
+              </div>
+              <div>
+                <p style="font-size:0.78rem;color:#64748b;margin-bottom:4px">figure / figcaption</p>
+                <figure style="margin:0;text-align:center;border:1px solid #e2e8f0;border-radius:8px;padding:0.6rem;background:#f8fafc;width:120px">
+                  <div style="width:80px;height:60px;background:#fde68a;margin:0 auto;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.5rem">🐱</div>
+                  <figcaption style="font-size:0.8rem;color:#64748b;margin-top:4px">고양이 사진</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 기본 table 구조 (1주차) ── -->
+    <div class="concept-section">
+      <h3>기본 table 구조 (th · td · caption · colspan · rowspan)</h3>
+      <p class="concept-desc"><code>th</code>는 헤더 셀(굵게·가운데 정렬 기본), <code>td</code>는 데이터 셀, <code>caption</code>은 표 제목. <code>colspan</code>으로 가로 셀 병합, <code>rowspan</code>으로 세로 셀 병합. <code>border-collapse: collapse</code>를 써야 이중 테두리가 제거됨.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#86efac"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="tag">&lt;table <span class="atr">border</span>=<span class="val">"1"</span>&gt;</span>
+  <span class="tag">&lt;caption&gt;</span>과일표<span class="tag">&lt;/caption&gt;</span>
+  <span class="tag">&lt;tr&gt;</span>
+    <span class="tag">&lt;th&gt;</span>이름<span class="tag">&lt;/th&gt;</span>
+    <span class="tag">&lt;th&gt;</span>색상<span class="tag">&lt;/th&gt;</span>
+  <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;tr&gt;</span>
+    <span class="tag">&lt;td&gt;</span>사과<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;td&gt;</span>빨강<span class="tag">&lt;/td&gt;</span>
+  <span class="tag">&lt;/tr&gt;</span>
+<span class="tag">&lt;/table&gt;</span>
+
+<span class="cm">&lt;!-- 셀 병합 --&gt;</span>
+<span class="tag">&lt;td <span class="atr">colspan</span>=<span class="val">"2"</span>&gt;</span>가로 2칸 병합<span class="tag">&lt;/td&gt;</span>
+<span class="tag">&lt;td <span class="atr">rowspan</span>=<span class="val">"2"</span>&gt;</span>세로 2칸 병합<span class="tag">&lt;/td&gt;</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <div style="display:flex;gap:1.5rem;flex-wrap:wrap;font-size:0.88rem">
+              <div>
+                <p style="font-size:0.78rem;color:#64748b;margin-bottom:4px">기본 table</p>
+                <table border="1" style="border-collapse:collapse">
+                  <caption style="font-size:0.78rem;color:#64748b;margin-bottom:3px">과일표</caption>
+                  <tr><th style="padding:4px 10px;background:#f1f5f9">이름</th><th style="padding:4px 10px;background:#f1f5f9">색상</th></tr>
+                  <tr><td style="padding:4px 10px">사과</td><td style="padding:4px 10px">빨강</td></tr>
+                  <tr><td style="padding:4px 10px">바나나</td><td style="padding:4px 10px">노랑</td></tr>
+                </table>
+              </div>
+              <div>
+                <p style="font-size:0.78rem;color:#64748b;margin-bottom:4px">colspan / rowspan</p>
+                <table border="1" style="border-collapse:collapse">
+                  <tr><td colspan="2" style="padding:4px 10px;text-align:center;background:#bae6fd">colspan=2 (가로 병합)</td></tr>
+                  <tr><td rowspan="2" style="padding:4px 10px;text-align:center;background:#bbf7d0">rowspan=2<br>(세로 병합)</td><td style="padding:4px 10px">A</td></tr>
+                  <tr><td style="padding:4px 10px">B</td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 폼 / input 타입 ── -->
+    <div class="concept-section">
+      <h3>폼 & input 타입</h3>
+      <p class="concept-desc"><code>form</code> 태그 안에 다양한 입력 요소를 넣어 서버로 데이터 전송. <code>input</code>의 <code>type</code> 속성이 입력 방식을 결정함. <code>label</code>과 연결하면 접근성(클릭 범위)이 향상됨.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#c4b5fd"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="tag">&lt;form&gt;</span>
+  <span class="tag">&lt;label&gt;</span>텍스트:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"text"</span>&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>이메일:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"email"</span>&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>날짜:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"date"</span>&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>색상:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"color"</span>&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>범위:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"range"</span>&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>체크박스:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"checkbox"</span>&gt;</span>
+
+  <span class="tag">&lt;label&gt;</span>라디오:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"radio"</span> <span class="atr">name</span>=<span class="val">"r"</span>&gt;</span> A
+  <span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"radio"</span> <span class="atr">name</span>=<span class="val">"r"</span>&gt;</span> B
+
+  <span class="tag">&lt;select&gt;</span>
+    <span class="tag">&lt;option&gt;</span>옵션1<span class="tag">&lt;/option&gt;</span>
+    <span class="tag">&lt;option&gt;</span>옵션2<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;/select&gt;</span>
+
+  <span class="tag">&lt;textarea&gt;</span>여러 줄 입력<span class="tag">&lt;/textarea&gt;</span>
+  <span class="tag">&lt;button <span class="atr">type</span>=<span class="val">"submit"</span>&gt;</span>전송<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <div class="w1-form-demo">
+              <div><label>텍스트:</label><input type="text" placeholder="텍스트 입력"></div>
+              <div><label>이메일:</label><input type="email" placeholder="example@email.com"></div>
+              <div><label>날짜:</label><input type="date"></div>
+              <div><label>색상:</label><input type="color" value="#4f46e5" style="width:40px;height:30px;padding:2px;cursor:pointer"></div>
+              <div><label>범위:</label><input type="range" style="max-width:160px"></div>
+              <div style="display:flex;align-items:center;gap:0.5rem"><label>체크박스:</label><input type="checkbox" checked> <label>라디오:</label><input type="radio" name="demo" checked> A <input type="radio" name="demo"> B</div>
+              <div><label>선택:</label>
+                <select style="padding:0.3rem;border:1px solid #e2e8f0;border-radius:4px;font-size:0.88rem">
+                  <option>옵션1</option><option>옵션2</option>
+                </select>
+              </div>
+              <div><label>여러 줄:</label><textarea rows="2" style="max-width:220px;padding:0.3rem;border:1px solid #e2e8f0;border-radius:4px;font-size:0.88rem;resize:vertical">여러 줄 입력</textarea></div>
+              <button type="button">전송</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 추가 입력 요소 ── -->
+    <div class="concept-section">
+      <h3>추가 input 타입 & 입력 요소 (password · search · tel · number · file · datalist · output · progress · optgroup)</h3>
+      <p class="concept-desc"><code>datalist</code>는 텍스트 입력에 자동완성 후보를 제공, <code>optgroup</code>은 <code>select</code> 옵션을 그룹으로 묶음, <code>output</code>은 폼 계산 결과 표시, <code>progress</code>는 작업 진행률 시각화. <code>type="file"</code>로 파일 업로드 입력 가능.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#c4b5fd"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">&lt;!-- 더 많은 input type --&gt;</span>
+<span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"password"</span>&gt;</span>
+<span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"search"</span>&gt;</span>
+<span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"tel"</span>&gt;</span>
+<span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"number"</span> <span class="atr">min</span>=<span class="val">"1"</span> <span class="atr">max</span>=<span class="val">"10"</span>&gt;</span>
+<span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"file"</span>&gt;</span>
+<span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"month"</span>&gt;</span>
+<span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"time"</span>&gt;</span>
+
+<span class="cm">&lt;!-- datalist: 자동완성 --&gt;</span>
+<span class="tag">&lt;input <span class="atr">list</span>=<span class="val">"browsers"</span>&gt;</span>
+<span class="tag">&lt;datalist <span class="atr">id</span>=<span class="val">"browsers"</span>&gt;</span>
+  <span class="tag">&lt;option <span class="atr">value</span>=<span class="val">"Chrome"</span>&gt;</span>
+  <span class="tag">&lt;option <span class="atr">value</span>=<span class="val">"Firefox"</span>&gt;</span>
+<span class="tag">&lt;/datalist&gt;</span>
+
+<span class="cm">&lt;!-- optgroup: 선택지 그룹화 --&gt;</span>
+<span class="tag">&lt;select&gt;</span>
+  <span class="tag">&lt;optgroup <span class="atr">label</span>=<span class="val">"프론트엔드"</span>&gt;</span>
+    <span class="tag">&lt;option&gt;</span>HTML<span class="tag">&lt;/option&gt;</span>
+    <span class="tag">&lt;option&gt;</span>CSS<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;/optgroup&gt;</span>
+  <span class="tag">&lt;optgroup <span class="atr">label</span>=<span class="val">"백엔드"</span>&gt;</span>
+    <span class="tag">&lt;option&gt;</span>Java<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;/optgroup&gt;</span>
+<span class="tag">&lt;/select&gt;</span>
+
+<span class="cm">&lt;!-- output: 계산 결과 표시 --&gt;</span>
+<span class="tag">&lt;form <span class="atr">oninput</span>=<span class="val">"r.value=+a.value+ +b.value"</span>&gt;</span>
+  <span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"range"</span> <span class="atr">id</span>=<span class="val">"a"</span>&gt;</span> +
+  <span class="tag">&lt;input <span class="atr">type</span>=<span class="val">"number"</span> <span class="atr">id</span>=<span class="val">"b"</span>&gt;</span> =
+  <span class="tag">&lt;output <span class="atr">name</span>=<span class="val">"r"</span>&gt;</span><span class="tag">&lt;/output&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
+
+<span class="cm">&lt;!-- progress --&gt;</span>
+<span class="tag">&lt;progress <span class="atr">value</span>=<span class="val">"70"</span> <span class="atr">max</span>=<span class="val">"100"</span>&gt;</span><span class="tag">&lt;/progress&gt;</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <div class="w1-form-demo">
+              <div><label>password:</label><input type="password" placeholder="비밀번호" value="abc123"></div>
+              <div><label>search:</label><input type="search" placeholder="검색어 입력"></div>
+              <div><label>tel:</label><input type="tel" placeholder="010-1234-5678"></div>
+              <div><label>number (1~10):</label><input type="number" min="1" max="10" value="5" style="width:70px"></div>
+              <div><label>file:</label><input type="file"></div>
+              <div><label>month:</label><input type="month"></div>
+              <div><label>time:</label><input type="time" value="09:30"></div>
+              <div><label>datalist (자동완성):</label><input list="demo-browsers" placeholder="브라우저 입력">
+                <datalist id="demo-browsers"><option value="Chrome"><option value="Firefox"><option value="Safari"></datalist>
+              </div>
+              <div><label>optgroup select:</label>
+                <select style="padding:0.3rem;border:1px solid #e2e8f0;border-radius:4px">
+                  <optgroup label="프론트엔드"><option>HTML</option><option>CSS</option></optgroup>
+                  <optgroup label="백엔드"><option>Java</option><option>Python</option></optgroup>
+                </select>
+              </div>
+              <div><label>output (range + number):</label>
+                <form oninput="demoOut.value=+demoA.value + +demoB.value" style="display:inline-flex;align-items:center;gap:0.4rem">
+                  <input type="range" id="demoA" value="30" min="0" max="100" style="width:80px">
+                  + <input type="number" id="demoB" value="20" style="width:50px;padding:2px 4px;border:1px solid #e2e8f0;border-radius:4px">
+                  = <output name="demoOut" style="font-weight:700;color:#4f46e5">50</output>
+                </form>
+              </div>
+              <div><label>progress (70/100):</label><progress value="70" max="100" style="width:160px"></progress></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 개념 표 -->
+    <div class="concept-section">
+      <h3>주요 태그 정리</h3>
+      <table class="ref-table">
+        <tr><th>분류</th><th>태그</th><th>설명</th></tr>
+        <tr><td>제목</td><td><code>h1</code>~<code>h6</code></td><td>크기별 제목. h1이 가장 큼</td></tr>
+        <tr><td>텍스트</td><td><code>strong</code>, <code>em</code></td><td>굵게(의미론적), 기울임(의미론적)</td></tr>
+        <tr><td>텍스트</td><td><code>mark</code>, <code>code</code></td><td>형광 하이라이트, 코드 표시</td></tr>
+        <tr><td>텍스트</td><td><code>sub</code>, <code>sup</code></td><td>아래첨자, 위첨자</td></tr>
+        <tr><td>목록</td><td><code>ul</code>, <code>ol</code>, <code>dl</code></td><td>비순서/순서/정의 목록</td></tr>
+        <tr><td>폼</td><td><code>input</code>, <code>select</code>, <code>textarea</code></td><td>다양한 입력 폼 요소</td></tr>
+        <tr><td>input 타입</td><td><code>text</code>, <code>email</code>, <code>date</code>, <code>color</code>, <code>range</code>, <code>checkbox</code>, <code>radio</code>…</td><td>type 속성으로 동작 결정</td></tr>
+        <tr><td>시멘틱</td><td><code>header</code>, <code>nav</code>, <code>section</code>, <code>article</code>, <code>footer</code></td><td>의미론적 구조 태그</td></tr>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     2주차
+================================================================ -->
+<section class="week-section" id="week2">
+  <div class="week-header">
+    <div>
+      <h2>2주차 — CSS 박스 모델 & 배치</h2>
+      <div class="subtitle">display · position · float · z-index · border · visibility</div>
+    </div>
+    <div class="week-number">02</div>
+  </div>
+
+  <div class="week-body">
+    <div class="overview">
+      <strong>주간 요약</strong>
+      CSS의 핵심인 박스 모델과 레이아웃 시스템을 이해합니다.
+      display 속성(block/inline/inline-block), position 5종류, float/clear, z-index 스태킹을 실습합니다.
+    </div>
+
+    <!-- ── display 비교 ── -->
+    <div class="concept-section">
+      <h3>display: block vs inline vs inline-block</h3>
+      <p class="concept-desc"><code>block</code>은 한 줄 전체를 차지하고 width/height/margin 모두 적용 가능(<code>div</code>, <code>p</code> 기본값). <code>inline</code>은 내용 크기만큼만 차지하며 <strong>width·height·상하margin이 무시됨</strong>(<code>span</code>, <code>a</code> 기본값). <code>inline-block</code>은 한 줄 배치이면서 width/height/margin 모두 적용 가능.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#86efac"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">/* block — 한 줄 차지 */</span>
+<span class="kw">div</span> { <span class="atr">display</span>: <span class="val">block</span>; }
+
+<span class="cm">/* inline — 내용 크기만큼만
+   width/height 지정 불가 */</span>
+<span class="kw">span</span> { <span class="atr">display</span>: <span class="val">inline</span>; }
+
+<span class="cm">/* inline-block — 한 줄 + 크기 지정 */</span>
+<span class="kw">div</span> { <span class="atr">display</span>: <span class="val">inline-block</span>;
+       <span class="atr">width</span>: <span class="val">80px</span>;
+       <span class="atr">height</span>: <span class="val">50px</span>; }</div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <p style="font-size:0.78rem;color:#64748b;margin-bottom:6px">▼ block (각각 한 줄 차지)</p>
+            <div class="w2-block-box">block 박스 1</div>
+            <div class="w2-block-box">block 박스 2</div>
+            <p style="font-size:0.78rem;color:#64748b;margin:8px 0 4px">▼ inline (내용 크기만큼, 한 줄에 이어짐)</p>
+            <span class="w2-inline-box">inline 1</span>
+            <span class="w2-inline-box" style="margin-left:4px">inline 2</span>
+            <p style="font-size:0.78rem;color:#64748b;margin:8px 0 4px">▼ inline-block (한 줄 + width/height 적용)</p>
+            <div class="w2-inline-block-box">inline-block 1</div>
+            <div class="w2-inline-block-box">inline-block 2</div>
+            <div class="w2-inline-block-box">inline-block 3</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── position 비교 ── -->
+    <div class="concept-section">
+      <h3>position: relative / absolute</h3>
+      <p class="concept-desc"><code>relative</code>는 원래 위치 기준으로 이동하며 원래 공간은 그대로 유지됨. <code>absolute</code>는 가장 가까운 <code>position</code>이 지정된 부모를 기준으로 배치되며 문서 흐름에서 빠져나옴. <code>static</code>(기본값)은 top/left가 무시됨.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#fca5a5"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">/* 부모: relative */</span>
+<span class="kw">.parent</span> {
+  <span class="atr">position</span>: <span class="val">relative</span>;
+}
+
+<span class="cm">/* 자식: relative — 원위치 기준 이동
+   공간은 그대로 남음 */</span>
+<span class="kw">.child-relative</span> {
+  <span class="atr">position</span>: <span class="val">relative</span>;
+  <span class="atr">top</span>: <span class="val">40px</span>;
+  <span class="atr">left</span>: <span class="val">60px</span>;
+}
+
+<span class="cm">/* 자식: absolute — 부모 기준
+   문서 흐름에서 분리됨 */</span>
+<span class="kw">.child-absolute</span> {
+  <span class="atr">position</span>: <span class="val">absolute</span>;
+  <span class="atr">bottom</span>: <span class="val">8px</span>;
+  <span class="atr">right</span>: <span class="val">8px</span>;
+}</div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기 (점선 = 부모 position:relative)</div>
+            <div class="w2-pos-demo">
+              <span class="w2-pos-label">부모 (position: relative)</span>
+              <div class="w2-pos-normal">🔵 static 원래 위치</div>
+              <div class="w2-pos-relative">🟢 relative · top:60px left:80px</div>
+              <div class="w2-pos-absolute">🔴 absolute · bottom:12px right:12px</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── fixed / sticky ── -->
+    <div class="concept-section">
+      <h3>position: fixed & sticky</h3>
+      <p class="concept-desc"><code>fixed</code>는 뷰포트(화면) 기준으로 고정되어 스크롤해도 같은 위치에 머뭄. <code>sticky</code>는 스크롤 전엔 <code>relative</code>처럼 동작하다가 지정한 임계점(<code>top: 0</code> 등) 도달 시 <code>fixed</code>처럼 고정됨.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#fde68a"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">/* fixed — 뷰포트 기준 고정
+   스크롤해도 화면에 그대로 */</span>
+<span class="kw">#fixedBtn</span> {
+  <span class="atr">position</span>: <span class="val">fixed</span>;
+  <span class="atr">bottom</span>: <span class="val">20px</span>;
+  <span class="atr">right</span>: <span class="val">20px</span>;
+}
+
+<span class="cm">/* sticky — 스크롤 중 임계점 도달 시 고정
+   relative + fixed 혼합 */</span>
+<span class="kw">.sticky-header</span> {
+  <span class="atr">position</span>: <span class="val">sticky</span>;
+  <span class="atr">top</span>: <span class="val">0</span>;
+  <span class="atr">background</span>: <span class="val">yellow</span>;
+}</div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <div style="display:flex;gap:1.2rem;flex-wrap:wrap;font-size:0.85rem">
+              <div>
+                <p style="font-size:0.78rem;color:#64748b;margin-bottom:6px;font-weight:700">fixed — 뷰포트 고정</p>
+                <div style="position:relative;height:90px;background:#f1f5f9;border-radius:6px;overflow:hidden;border:1px solid #e2e8f0;width:160px">
+                  <div style="height:200px;padding:6px;font-size:0.78rem;color:#64748b">스크롤 가능 콘텐츠<br>...<br>...<br>...</div>
+                  <div style="position:absolute;bottom:8px;right:8px;background:#ef4444;color:white;padding:4px 8px;border-radius:6px;font-size:0.75rem;font-weight:700">⬆ TOP</div>
+                </div>
+                <p style="font-size:0.72rem;color:#94a3b8;margin-top:4px">빨간 버튼 = fixed 고정</p>
+              </div>
+              <div>
+                <p style="font-size:0.78rem;color:#64748b;margin-bottom:6px;font-weight:700">sticky — 스크롤 시 고정</p>
+                <div style="height:90px;overflow-y:scroll;border:1px solid #e2e8f0;border-radius:6px;width:160px">
+                  <div style="padding:6px;font-size:0.78rem;color:#64748b">위 콘텐츠</div>
+                  <div style="position:sticky;top:0;background:#fef08a;border:1px solid #facc15;padding:4px 8px;font-size:0.78rem;font-weight:700;text-align:center">📌 sticky 헤더</div>
+                  <div style="padding:6px;font-size:0.78rem;color:#64748b">아래 내용<br>...<br>...<br>...<br>...</div>
+                </div>
+                <p style="font-size:0.72rem;color:#94a3b8;margin-top:4px">스크롤하면 헤더가 고정됨</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── z-index ── -->
+    <div class="concept-section">
+      <h3>z-index 스태킹</h3>
+      <p class="concept-desc">겹치는 요소의 앞뒤 순서를 숫자로 지정. 숫자가 클수록 앞에 표시됨. <strong>⚠️ <code>position</code>이 <code>static</code>이 아닌 값이어야 동작함</strong>(relative/absolute/fixed/sticky). 부모-자식 관계에서 쌓임 맥락(stacking context)에 주의.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#c4b5fd"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">/* ⚠️ position이 있어야 z-index 동작! */</span>
+<span class="kw">div</span> { <span class="atr">position</span>: <span class="val">absolute</span>; }
+
+<span class="kw">.red</span>  { <span class="atr">z-index</span>: <span class="val">1</span>;  }  <span class="cm">/* 가장 뒤 */</span>
+<span class="kw">.green</span>{ <span class="atr">z-index</span>: <span class="val">20</span>; }  <span class="cm">/* 중간 */</span>
+<span class="kw">.blue</span> { <span class="atr">z-index</span>: <span class="val">30</span>; }  <span class="cm">/* 맨 앞 */</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기 (박스가 겹쳐 있음)</div>
+            <div class="w2-zindex-demo">
+              <div class="w2-zbox r"><span>빨강</span><span>z-index: 1</span></div>
+              <div class="w2-zbox b"><span>파랑</span><span>z-index: 30</span></div>
+              <div class="w2-zbox g"><span>초록</span><span>z-index: 20</span></div>
+            </div>
+            <p style="font-size:0.8rem;color:#64748b;margin-top:0.7rem">파랑(30) → 초록(20) → 빨강(1) 순서로 앞에 표시됩니다</p>
+            <p style="font-size:0.8rem;color:#ef4444;margin-top:0.4rem">⚠️ <code style="font-size:0.8rem">z-index: -20</code> (음수)는 배경보다 뒤로 가서 보이지 않을 수 있음. 원본 z-index.html의 box1이 이 케이스.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── float ── -->
+    <div class="concept-section">
+      <h3>float & clear</h3>
+      <p class="concept-desc"><code>float: left/right</code>로 요소를 띄워 텍스트가 그 주변을 감싸게 함. <code>clear: left</code>=왼쪽 float 해제, <code>clear: right</code>=오른쪽 float 해제, <code>clear: both</code>=양쪽 모두 해제. float 요소가 많으면 부모의 높이가 0이 되는 "높이 붕괴" 문제 → 부모에 <code>::after { content:""; display:table; clear:both; }</code> clearfix 패턴으로 해결.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#6ee7b7"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="kw">.box</span> { <span class="atr">float</span>: <span class="val">left</span>;
+         <span class="atr">margin-right</span>: <span class="val">10px</span>; }
+
+<span class="cm">/* clearfix — 부모 높이 붕괴 방지 */</span>
+<span class="kw">.parent</span>::after {
+  <span class="atr">content</span>: <span class="val">""</span>;
+  <span class="atr">display</span>: <span class="val">table</span>;
+  <span class="atr">clear</span>: <span class="val">both</span>;
+}</div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <div style="font-size:0.78rem;color:#64748b;margin-bottom:4px;font-weight:700">float: left + right 동시</div>
+            <div style="overflow:hidden;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:0.7rem;margin-bottom:0.8rem;font-size:0.85rem">
+              <div style="float:left;background:#86efac;border:2px solid #22c55e;padding:0.4rem 0.6rem;margin-right:8px">float: left</div>
+              <div style="float:right;background:#93c5fd;border:2px solid #3b82f6;padding:0.4rem 0.6rem;margin-left:8px">float: right</div>
+              <p style="margin:0">텍스트가 left 박스 오른쪽, right 박스 왼쪽을 채웁니다.</p>
+            </div>
+            <div style="font-size:0.78rem;color:#64748b;margin-bottom:4px;font-weight:700">clear 값 비교</div>
+            <div style="font-size:0.83rem;display:flex;flex-direction:column;gap:4px">
+              <div style="overflow:hidden;background:#fef3c7;border-radius:4px;padding:4px 8px"><code style="font-size:0.8rem">clear: left</code> — 왼쪽 float 해제</div>
+              <div style="overflow:hidden;background:#ede9fe;border-radius:4px;padding:4px 8px"><code style="font-size:0.8rem">clear: right</code> — 오른쪽 float 해제</div>
+              <div style="overflow:hidden;background:#fce7f3;border-radius:4px;padding:4px 8px"><code style="font-size:0.8rem">clear: both</code> — 양쪽 모두 해제 (가장 많이 사용)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── relative hover 효과 (ex01) ── -->
+    <div class="concept-section">
+      <h3>relative hover 효과 — "Thanks" 예제 (ex01.html)</h3>
+      <p class="concept-desc">hover 시 <code>position: relative</code>를 동적으로 적용해 이동 효과를 내는 패턴. 원래 공간이 유지되므로 주변 요소에 영향을 주지 않음. CSS만으로 인터랙티브한 애니메이션 효과를 구현하는 기초 기법.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#86efac"></span>코드 &amp; 결과 — h 와 k 에 마우스를 올려보세요</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="kw">div</span> {
+  <span class="atr">display</span>: <span class="val">inline-block</span>;
+  <span class="atr">width</span>: <span class="val">50px</span>; <span class="atr">height</span>: <span class="val">50px</span>;
+  <span class="atr">background-color</span>: <span class="val">red</span>;
+}
+
+<span class="cm">/* h: hover 시 아래-오른쪽으로 이동 */</span>
+<span class="kw">#down:hover</span> {
+  <span class="atr">position</span>: <span class="val">relative</span>;
+  <span class="atr">left</span>: <span class="val">20px</span>;
+  <span class="atr">top</span>: <span class="val">20px</span>;
+  <span class="atr">background-color</span>: <span class="val">green</span>;
+}
+
+<span class="cm">/* k: hover 시 위-왼쪽으로 이동 */</span>
+<span class="kw">#up:hover</span> {
+  <span class="atr">position</span>: <span class="val">relative</span>;
+  <span class="atr">right</span>: <span class="val">20px</span>;
+  <span class="atr">bottom</span>: <span class="val">20px</span>;
+  <span class="atr">background-color</span>: <span class="val">green</span>;
+}</div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기 — h, k에 마우스를 올려보세요</div>
+            <div style="display:flex;gap:4px;margin-top:8px">
+              <div style="display:inline-flex;width:44px;height:44px;background:red;color:white;align-items:center;justify-content:center;font-weight:700;border-radius:4px">T</div>
+              <div id="ex01-h" style="display:inline-flex;width:44px;height:44px;background:red;color:white;align-items:center;justify-content:center;font-weight:700;border-radius:4px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.cssText='display:inline-flex;width:44px;height:44px;background:green;color:white;align-items:center;justify-content:center;font-weight:700;border-radius:4px;cursor:pointer;transition:all 0.2s;position:relative;left:20px;top:20px'" onmouseout="this.style.cssText='display:inline-flex;width:44px;height:44px;background:red;color:white;align-items:center;justify-content:center;font-weight:700;border-radius:4px;cursor:pointer;transition:all 0.2s'">h</div>
+              <div style="display:inline-flex;width:44px;height:44px;background:red;color:white;align-items:center;justify-content:center;font-weight:700;border-radius:4px">a</div>
+              <div style="display:inline-flex;width:44px;height:44px;background:red;color:white;align-items:center;justify-content:center;font-weight:700;border-radius:4px">n</div>
+              <div id="ex01-k" style="display:inline-flex;width:44px;height:44px;background:red;color:white;align-items:center;justify-content:center;font-weight:700;border-radius:4px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.cssText='display:inline-flex;width:44px;height:44px;background:green;color:white;align-items:center;justify-content:center;font-weight:700;border-radius:4px;cursor:pointer;transition:all 0.2s;position:relative;right:20px;bottom:20px'" onmouseout="this.style.cssText='display:inline-flex;width:44px;height:44px;background:red;color:white;align-items:center;justify-content:center;font-weight:700;border-radius:4px;cursor:pointer;transition:all 0.2s'">k</div>
+              <div style="display:inline-flex;width:44px;height:44px;background:red;color:white;align-items:center;justify-content:center;font-weight:700;border-radius:4px">s</div>
+            </div>
+            <p style="font-size:0.78rem;color:#64748b;margin-top:0.8rem">position: relative는 원래 공간을 유지하면서 이동합니다</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── border ── -->
+    <div class="concept-section">
+      <h3>border 스타일</h3>
+      <p class="concept-desc"><code>border: 두께 스타일 색상</code> 단축 속성. 스타일은 solid(실선)/dashed(점선)/dotted(점)/double(이중선) 등. 각 방향(<code>border-top/right/bottom/left</code>)을 개별 지정 가능. <code>border-radius</code>로 모서리를 둥글게, <code>50%</code>로 원형.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#fde68a"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">/* 기본 */</span>
+<span class="atr">border</span>: <span class="val">3px solid black</span>;
+
+<span class="cm">/* 점선 / 이중선 */</span>
+<span class="atr">border</span>: <span class="val">3px dashed red</span>;
+<span class="atr">border</span>: <span class="val">4px double blue</span>;
+
+<span class="cm">/* 각 방향 다르게 */</span>
+<span class="atr">border-top</span>:   <span class="val">5px solid red</span>;
+<span class="atr">border-right</span>: <span class="val">5px solid blue</span>;
+<span class="atr">border-bottom</span>:<span class="val">5px solid green</span>;
+<span class="atr">border-left</span>:  <span class="val">5px solid orange</span>;
+
+<span class="cm">/* 둥근 모서리 */</span>
+<span class="atr">border-radius</span>: <span class="val">12px</span>;
+<span class="atr">border-radius</span>: <span class="val">50%</span>; <span class="cm">/* 원 */</span></div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <div class="w2-border-demo">
+              <div class="w2-bx" style="border:3px solid black">solid</div>
+              <div class="w2-bx" style="border:3px dashed red;color:red">dashed</div>
+              <div class="w2-bx" style="border:4px double blue;color:blue">double</div>
+              <div class="w2-bx" style="border-top:5px solid red;border-right:5px solid blue;border-bottom:5px solid green;border-left:5px solid orange;font-size:0.68rem">4방향</div>
+              <div class="w2-bx" style="border:2px solid #4f46e5;border-radius:12px;color:#4f46e5">radius</div>
+              <div class="w2-bx" style="border:2px solid #ef4444;border-radius:50%;color:#ef4444">원(50%)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── visibility ── -->
+    <div class="concept-section">
+      <h3>visibility vs display:none</h3>
+      <p class="concept-desc"><code>visibility: hidden</code>은 요소를 보이지 않게 하지만 원래 차지하던 공간은 그대로 유지. <code>display: none</code>은 요소를 완전히 제거해 공간도 사라짐. 레이아웃을 유지하면서 숨길 때는 <code>visibility</code>, 공간까지 없앨 때는 <code>display: none</code> 사용.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#fca5a5"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">/* 숨기기 — 공간 유지 */</span>
+<span class="kw">.hidden</span> {
+  <span class="atr">visibility</span>: <span class="val">hidden</span>;
+}
+
+<span class="cm">/* 숨기기 — 공간도 사라짐 */</span>
+<span class="kw">.gone</span> {
+  <span class="atr">display</span>: <span class="val">none</span>;
+}</div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기 — 가운데 박스의 차이를 확인하세요</div>
+            <div class="w2-vis-demo">
+              <div>
+                <p style="font-size:0.8rem;font-weight:700;color:#0369a1;margin-bottom:6px">visibility: hidden — 숨지만 공간은 유지</p>
+                <div class="w2-vis-row">
+                  <div class="w2-vis-box" style="background:#bae6fd;border:2px solid #0ea5e9">보임</div>
+                  <div class="w2-vis-box" style="background:#e2e8f0;border:2px dashed #94a3b8;visibility:hidden">숨김</div>
+                  <div class="w2-vis-box" style="background:#bae6fd;border:2px solid #0ea5e9">보임</div>
+                  <span style="font-size:0.8rem;color:#64748b">← 빈 공간이 그대로 남아있음</span>
+                </div>
+              </div>
+              <div>
+                <p style="font-size:0.8rem;font-weight:700;color:#b45309;margin-bottom:6px">display: none — 완전히 제거 (공간도 사라짐)</p>
+                <div class="w2-vis-row">
+                  <div class="w2-vis-box" style="background:#fde68a;border:2px solid #f59e0b">보임</div>
+                  <div class="w2-vis-box" style="background:#fde68a;border:2px solid #f59e0b;display:none">없어짐</div>
+                  <div class="w2-vis-box" style="background:#fde68a;border:2px solid #f59e0b">보임</div>
+                  <span style="font-size:0.8rem;color:#64748b">← 두 박스가 바로 붙어있음</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 개념 표 -->
+    <div class="concept-section">
+      <h3>position 속성 비교</h3>
+      <table class="ref-table">
+        <tr><th>값</th><th>기준점</th><th>문서 흐름</th><th>특징</th></tr>
+        <tr><td><code>static</code></td><td>없음(기본)</td><td>유지</td><td>기본값. top/left 무시됨</td></tr>
+        <tr><td><code>relative</code></td><td>원래 위치</td><td>유지(공간 남음)</td><td>자신의 원위치 기준으로 이동</td></tr>
+        <tr><td><code>absolute</code></td><td>position 부모</td><td>제거</td><td>가장 가까운 non-static 부모 기준</td></tr>
+        <tr><td><code>fixed</code></td><td>뷰포트</td><td>제거</td><td>스크롤 무관하게 화면에 고정</td></tr>
+        <tr><td><code>sticky</code></td><td>스크롤 컨테이너</td><td>유지→고정</td><td>임계점 전엔 relative, 후엔 fixed처럼</td></tr>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     3주차
+================================================================ -->
+<section class="week-section" id="week3">
+  <div class="week-header">
+    <div>
+      <h2>3주차 — 목록 스타일 & 표 디자인</h2>
+      <div class="subtitle">list-style · 네비게이션 메뉴 · 표 CSS · 시멘틱 HTML5</div>
+    </div>
+    <div class="week-number">03</div>
+  </div>
+
+  <div class="week-body">
+    <div class="overview">
+      <strong>주간 요약</strong>
+      CSS로 목록(list)을 수평 내비게이션 메뉴로 변환하는 방법,
+      표(table) 스타일링(줄무늬, 호버, 헤더/푸터 구분),
+      시멘틱 HTML5 레이아웃(nav, section, article, footer)을 학습합니다.
+    </div>
+
+    <!-- ── list-style-type ── -->
+    <div class="concept-section">
+      <h3>list-style-type 마커 종류</h3>
+      <p class="concept-desc"><code>list-style-type</code>으로 불릿 마커 모양을 지정. <code>ul</code>은 disc·circle·square·none, <code>ol</code>은 decimal·upper-roman·lower-alpha 등. <code>list-style: none</code> + padding 제거로 기본 마커를 없애고 커스텀 디자인의 메뉴를 만들 수 있음.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#fde68a"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="kw">ul.disc</span>   { <span class="atr">list-style-type</span>: <span class="val">disc</span>; }
+<span class="kw">ul.circle</span> { <span class="atr">list-style-type</span>: <span class="val">circle</span>; }
+<span class="kw">ul.square</span> { <span class="atr">list-style-type</span>: <span class="val">square</span>; }
+<span class="kw">ul.none</span>   { <span class="atr">list-style-type</span>: <span class="val">none</span>; }
+
+<span class="kw">ol.roman</span>  { <span class="atr">list-style-type</span>: <span class="val">upper-roman</span>; }
+<span class="kw">ol.alpha</span>  { <span class="atr">list-style-type</span>: <span class="val">lower-alpha</span>; }
+<span class="kw">ol.decimal</span>{ <span class="atr">list-style-type</span>: <span class="val">decimal</span>; }</div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <div class="w3-list-types">
+              <div>
+                <h5>disc</h5>
+                <ul style="list-style-type:disc;padding-left:1.2rem;font-size:0.85rem"><li>커피</li><li>녹차</li></ul>
+              </div>
+              <div>
+                <h5>circle</h5>
+                <ul style="list-style-type:circle;padding-left:1.2rem;font-size:0.85rem"><li>커피</li><li>녹차</li></ul>
+              </div>
+              <div>
+                <h5>square</h5>
+                <ul style="list-style-type:square;padding-left:1.2rem;font-size:0.85rem"><li>커피</li><li>녹차</li></ul>
+              </div>
+              <div>
+                <h5>none</h5>
+                <ul style="list-style-type:none;padding-left:0.4rem;font-size:0.85rem"><li>커피</li><li>녹차</li></ul>
+              </div>
+              <div>
+                <h5>upper-roman</h5>
+                <ol style="list-style-type:upper-roman;padding-left:1.4rem;font-size:0.85rem"><li>HTML</li><li>CSS</li></ol>
+              </div>
+              <div>
+                <h5>lower-alpha</h5>
+                <ol style="list-style-type:lower-alpha;padding-left:1.4rem;font-size:0.85rem"><li>HTML</li><li>CSS</li></ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 수평 내비게이션 메뉴 ── -->
+    <div class="concept-section">
+      <h3>수평 내비게이션 메뉴</h3>
+      <p class="concept-desc"><code>ul</code>을 수평 메뉴로 만드는 핵심 3가지: ① <code>list-style: none</code>으로 불릿 제거 ② <code>li { display: inline-block }</code>으로 한 줄 배치 ③ <code>a { text-decoration: none }</code>으로 밑줄 제거. <code>a:hover</code>로 색상 변경 효과 추가.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#6ee7b7"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="tag">&lt;nav <span class="atr">id</span>=<span class="val">"menubar"</span>&gt;</span>
+  <span class="tag">&lt;ul&gt;</span>
+    <span class="tag">&lt;li&gt;&lt;a <span class="atr">href</span>=<span class="val">"#"</span>&gt;</span>Home<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="tag">&lt;li&gt;&lt;a <span class="atr">href</span>=<span class="val">"#"</span>&gt;</span>Espresso<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="tag">&lt;li&gt;&lt;a <span class="atr">href</span>=<span class="val">"#"</span>&gt;</span>Latte<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+  <span class="tag">&lt;/ul&gt;</span>
+<span class="tag">&lt;/nav&gt;</span>
+
+<span class="kw">#menubar ul</span> { <span class="atr">list-style</span>: <span class="val">none</span>; }
+<span class="kw">#menubar li</span> { <span class="atr">display</span>: <span class="val">inline-block</span>; }
+<span class="kw">#menubar a</span>  {
+  <span class="atr">text-decoration</span>: <span class="val">none</span>;
+  <span class="atr">color</span>: <span class="val">white</span>;
+  <span class="atr">padding</span>: <span class="val">0.4rem 0.8rem</span>;
+}
+<span class="kw">#menubar a:hover</span> { <span class="atr">color</span>: <span class="val">violet</span>; }</div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기 (항목에 마우스를 올려보세요)</div>
+            <nav class="w3-nav-demo">
+              <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Espresso</a></li>
+                <li><a href="#">Cappuccino</a></li>
+                <li><a href="#">Cafe Latte</a></li>
+                <li><a href="#">F.A.Q</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 줄무늬 표 ── -->
+    <div class="concept-section">
+      <h3>줄무늬 표 + hover 효과</h3>
+      <p class="concept-desc"><code>thead</code>(헤더)/<code>tbody</code>(본문)/<code>tfoot</code>(푸터)으로 표 구조를 의미론적으로 분리. <code>tbody tr:nth-child(even)</code>으로 짝수 행에 배경색을 주면 줄무늬 효과, <code>tbody tr:hover</code>로 마우스 올린 행 강조.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#fca5a5"></span>코드 &amp; 결과 (표에 마우스를 올려보세요)</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="kw">table</span>  { <span class="atr">border-collapse</span>: <span class="val">collapse</span>; }
+<span class="kw">thead</span>  { <span class="atr">background</span>: <span class="val">#333</span>;
+          <span class="atr">color</span>: <span class="val">yellow</span>; }
+<span class="kw">tfoot</span>  { <span class="atr">background</span>: <span class="val">#f1f5f9</span>; }
+
+<span class="cm">/* 짝수 행 배경 */</span>
+<span class="kw">tbody tr:nth-child(even)</span> {
+  <span class="atr">background</span>: <span class="val">lightblue</span>;
+}
+
+<span class="cm">/* 행 hover */</span>
+<span class="kw">tbody tr:hover</span> {
+  <span class="atr">background</span>: <span class="val">pink</span>;
+}</div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기</div>
+            <table class="w3-table-demo">
+              <caption>2017년 1학기 성적</caption>
+              <thead>
+                <tr><th>이름</th><th>국어</th><th>영어</th><th>수학</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>홍길동</td><td>90</td><td>85</td><td>92</td></tr>
+                <tr><td>김철수</td><td>78</td><td>91</td><td>88</td></tr>
+                <tr><td>이영희</td><td>95</td><td>87</td><td>79</td></tr>
+                <tr><td>박민준</td><td>82</td><td>76</td><td>94</td></tr>
+              </tbody>
+              <tfoot>
+                <tr><td>합계</td><td>345</td><td>339</td><td>353</td></tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-section">
+      <h3>list-style 속성 정리</h3>
+      <table class="ref-table">
+        <tr><th>속성</th><th>값 예시</th><th>설명</th></tr>
+        <tr><td><code>list-style-type</code></td><td>disc, circle, square, none, decimal, upper-roman…</td><td>마커(불릿) 모양</td></tr>
+        <tr><td><code>list-style-position</code></td><td>inside, outside</td><td>마커 위치 (안쪽/바깥쪽)</td></tr>
+        <tr><td><code>list-style-image</code></td><td>url("icon.png")</td><td>이미지 마커</td></tr>
+        <tr><td><code>list-style</code></td><td>단축 속성</td><td>type position image 한 번에</td></tr>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     4주차
+================================================================ -->
+<section class="week-section" id="week4">
+  <div class="week-header">
+    <div>
+      <h2>4주차 — CSS Transform & Animation</h2>
+      <div class="subtitle">2D 변환 · transition · @keyframes · 다양한 애니메이션</div>
+    </div>
+    <div class="week-number">04</div>
+  </div>
+
+  <div class="week-body">
+    <div class="overview">
+      <strong>주간 요약</strong>
+      CSS의 2D transform 함수(translate, scale, rotate, skew)와
+      transition으로 부드러운 전환 효과,
+      그리고 @keyframes를 이용한 자동 반복 애니메이션을 학습합니다.
+    </div>
+
+    <!-- ── transform 즉시 변환 (transform.html) ── -->
+    <div class="concept-section">
+      <h3>transform 즉시 변환 — transition 없음 (transform.html)</h3>
+      <p class="concept-desc"><code>transform</code>은 요소의 모양/위치를 변환하는 CSS 속성. <code>transition</code>이 없으면 hover 시 즉시(뚝) 변환됨. <code>translate(x,y)</code>=이동, <code>scale(n)</code>=크기, <code>rotate(deg)</code>=회전, <code>skew(x,y)</code>=기울임. 실제 레이아웃에는 영향을 주지 않음.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#fca5a5"></span>코드 &amp; 결과 — 마우스를 올리면 즉시 변환됩니다</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">/* transition 없음 → 즉시 변환 */</span>
+
+<span class="kw">.translate</span> { <span class="atr">background-color</span>: <span class="val">pink</span>; }
+<span class="kw">.translate:hover</span> {
+  <span class="atr">transform</span>: <span class="val">translate(80px, 80px)</span>;
+}
+
+<span class="kw">.scale</span> { <span class="atr">background-color</span>: <span class="val">lightgoldenrodyellow</span>; }
+<span class="kw">.scale:hover</span> {
+  <span class="atr">transform</span>: <span class="val">scale(2, 2)</span>;
+}
+
+<span class="kw">.rotate</span> { <span class="atr">background-color</span>: <span class="val">lightblue</span>; }
+<span class="kw">.rotate:hover</span> {
+  <span class="atr">transform</span>: <span class="val">rotate(45deg)</span>;
+}
+
+<span class="kw">.skew</span> { <span class="atr">background-color</span>: <span class="val">lightgreen</span>; }
+<span class="kw">.skew:hover</span> {
+  <span class="atr">transform</span>: <span class="val">skew(30deg, 30deg)</span>;
+}</div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기 — 즉시 변환 (transition 없음)</div>
+            <div class="w4-transform-grid">
+              <div>
+                <h5>translate(80px,80px)</h5>
+                <div style="width:70px;height:70px;background:pink;border:2px solid #f9a8d4;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;border-radius:6px;cursor:pointer" onmouseover="this.style.transform='translate(20px,20px)'" onmouseout="this.style.transform=''">hover</div>
+              </div>
+              <div>
+                <h5>scale(2, 2)</h5>
+                <div style="width:70px;height:70px;background:lightgoldenrodyellow;border:2px solid #fde68a;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;border-radius:6px;cursor:pointer" onmouseover="this.style.transform='scale(1.5)'" onmouseout="this.style.transform=''">hover</div>
+              </div>
+              <div>
+                <h5>rotate(45deg)</h5>
+                <div style="width:70px;height:70px;background:lightblue;border:2px solid #93c5fd;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;border-radius:6px;cursor:pointer" onmouseover="this.style.transform='rotate(45deg)'" onmouseout="this.style.transform=''">hover</div>
+              </div>
+              <div>
+                <h5>skew(30deg,30deg)</h5>
+                <div style="width:70px;height:70px;background:lightgreen;border:2px solid #86efac;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;border-radius:6px;cursor:pointer" onmouseover="this.style.transform='skew(30deg,30deg)'" onmouseout="this.style.transform=''">hover</div>
+              </div>
+            </div>
+            <p class="w4-hint" style="margin-top:1rem">💡 transition 없으면 즉시 변환, transition 추가하면 아래처럼 부드럽게 전환</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── transform + transition ── -->
+    <div class="concept-section">
+      <h3>transform 4종류 (박스에 마우스를 올려보세요)</h3>
+      <p class="concept-desc"><code>transition: all 시간 timing</code>을 추가하면 transform 변환이 부드럽게 이어짐. <code>ease</code>는 처음·끝이 느리고 중간이 빠름, <code>linear</code>는 일정 속도, <code>ease-in</code>은 천천히 시작, <code>ease-out</code>은 천천히 끝남.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#fca5a5"></span>코드 &amp; 결과 — transition: all 0.35s 적용됨</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">/* transition으로 부드럽게 */</span>
+<span class="kw">.box</span> { <span class="atr">transition</span>: <span class="val">all 0.35s ease</span>; }
+
+<span class="cm">/* 1. 이동 */</span>
+<span class="kw">.translate:hover</span> {
+  <span class="atr">transform</span>: <span class="val">translate(20px, 20px)</span>;
+}
+
+<span class="cm">/* 2. 크기 */</span>
+<span class="kw">.scale:hover</span> {
+  <span class="atr">transform</span>: <span class="val">scale(1.5)</span>;
+}
+
+<span class="cm">/* 3. 회전 */</span>
+<span class="kw">.rotate:hover</span> {
+  <span class="atr">transform</span>: <span class="val">rotate(45deg)</span>;
+}
+
+<span class="cm">/* 4. 기울임 */</span>
+<span class="kw">.skew:hover</span> {
+  <span class="atr">transform</span>: <span class="val">skew(20deg, 5deg)</span>;
+}</div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기 — 마우스를 올리면 변환됩니다</div>
+            <div class="w4-transform-grid">
+              <div>
+                <h5>translate<br>(이동)</h5>
+                <div class="w4-box w4-translate">hover</div>
+              </div>
+              <div>
+                <h5>scale<br>(크기)</h5>
+                <div class="w4-box w4-scale">hover</div>
+              </div>
+              <div>
+                <h5>rotate<br>(회전)</h5>
+                <div class="w4-box w4-rotate">hover</div>
+              </div>
+              <div>
+                <h5>skew<br>(기울임)</h5>
+                <div class="w4-box w4-skew">hover</div>
+              </div>
+            </div>
+            <p class="w4-hint">💡 transform.html은 즉시 변환, transition.html은 위처럼 부드럽게 변환</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── @keyframes 애니메이션 ── -->
+    <div class="concept-section">
+      <h3>@keyframes 자동 애니메이션 (자동 재생 중)</h3>
+      <p class="concept-desc"><code>@keyframes 이름 { 0%{...} 100%{...} }</code>으로 애니메이션 정의 후 <code>animation: 이름 시간 반복 방향</code>으로 적용. <code>infinite</code>=무한 반복, <code>alternate</code>=정방향→역방향 반복. <code>transition</code>과 달리 hover 없이 자동 실행되고 중간 단계(50% 등)를 여러 개 지정 가능.</p>
+      <div class="demo-block">
+        <div class="demo-block-title"><span class="dot" style="background:#6ee7b7"></span>코드 &amp; 결과</div>
+        <div class="demo-cols">
+          <div class="demo-code"><span class="cm">/* 1. 좌우로 이동하는 박스 */</span>
+<span class="kw">@keyframes</span> moveRight {
+  <span class="val">0%</span>   { <span class="atr">margin-left</span>: <span class="val">0</span>; }
+  <span class="val">100%</span> { <span class="atr">margin-left</span>: <span class="val">300px</span>; }
+}
+<span class="kw">.box</span> {
+  <span class="atr">animation</span>: <span class="val">moveRight 2s</span>
+               <span class="val">infinite alternate</span>;
+}
+
+<span class="cm">/* 2. 원으로 변하며 날아가는 박스 */</span>
+<span class="kw">@keyframes</span> fly {
+  <span class="val">0%</span>   { <span class="atr">border-radius</span>: <span class="val">0</span>; }
+  <span class="val">100%</span> { <span class="atr">border-radius</span>: <span class="val">50%</span>;
+          <span class="atr">background</span>: <span class="val">coral</span>; }
+}
+
+<span class="cm">/* 3. 공이 떨어지는 효과 */</span>
+<span class="kw">@keyframes</span> fall {
+  <span class="val">0%</span>   { <span class="atr">margin-top</span>: <span class="val">0</span>;
+          <span class="atr">height</span>: <span class="val">60px</span>; }
+  <span class="val">100%</span> { <span class="atr">margin-top</span>: <span class="val">60px</span>;
+          <span class="atr">height</span>: <span class="val">35px</span>;
+          <span class="atr">width</span>: <span class="val">75px</span>; }
+}
+<span class="kw">.ball</span> {
+  <span class="atr">animation</span>: <span class="val">fall 1s ease-in</span>
+               <span class="val">infinite alternate</span>;
+}</div>
+          <div class="demo-result">
+            <div class="demo-label">결과 미리보기 — 자동 재생 중</div>
+            <div class="w4-anim-area">
+              <div>
+                <p class="w4-anim-label">① 좌우로 이동하는 박스 (검정)</p>
+                <div class="w4-anim-track">
+                  <div class="w4-moving-box"></div>
+                </div>
+              </div>
+              <div>
+                <p class="w4-anim-label">② 원으로 변하며 날아가는 박스 (핑크)</p>
+                <div class="w4-anim-track">
+                  <div class="w4-flying-box"></div>
+                </div>
+              </div>
+              <div>
+                <p class="w4-anim-label">③ 공이 바닥에 떨어지는 효과 (하늘색)</p>
+                <div class="w4-ball-track">
+                  <div class="w4-ball"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 개념 표 -->
+    <div class="concept-section">
+      <h3>transform 함수 & animation 속성 정리</h3>
+      <table class="ref-table">
+        <tr><th>함수/속성</th><th>예시</th><th>설명</th></tr>
+        <tr><td><code>translate(x,y)</code></td><td><code>translate(80px, 80px)</code></td><td>X/Y축으로 이동</td></tr>
+        <tr><td><code>scale(n)</code></td><td><code>scale(2)</code></td><td>크기를 n배로 확대/축소</td></tr>
+        <tr><td><code>rotate(deg)</code></td><td><code>rotate(45deg)</code></td><td>각도만큼 회전</td></tr>
+        <tr><td><code>skew(x,y)</code></td><td><code>skew(30deg,30deg)</code></td><td>X/Y축으로 기울임</td></tr>
+        <tr><td><code>animation-duration</code></td><td>2s</td><td>1회 실행 시간</td></tr>
+        <tr><td><code>animation-iteration-count</code></td><td>infinite</td><td>반복 횟수</td></tr>
+        <tr><td><code>animation-direction</code></td><td>alternate</td><td>정방향→역방향 반복</td></tr>
+        <tr><td><code>animation-timing-function</code></td><td>ease-in, linear</td><td>속도 곡선</td></tr>
+      </table>
+    </div>
+
+    <div class="concept-section">
+      <h3>transition vs @keyframes animation</h3>
+      <table class="ref-table">
+        <tr><th>구분</th><th>transition</th><th>animation (@keyframes)</th></tr>
+        <tr><td>트리거</td><td>hover 등 상태 변화 필요</td><td>자동 실행 가능</td></tr>
+        <tr><td>반복</td><td>불가</td><td>infinite 등 반복 설정 가능</td></tr>
+        <tr><td>중간 단계</td><td>시작→끝 2단계만</td><td>0%~100% 다단계 설정 가능</td></tr>
+        <tr><td>용도</td><td>버튼 hover, 색상 전환 등 단순 전환</td><td>로딩, 배너 슬라이드 등 복잡한 애니메이션</td></tr>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>2026 웹프로그래밍 1~4주차 정리 &nbsp;|&nbsp; HTML5 · CSS3 기초 — 코드 + 실행 결과 나란히 보기</p>
+</footer>
+
+</body>
+</html>

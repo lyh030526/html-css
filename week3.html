@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* 1. 네비게이션 바 스타일 */
+    nav ul { 
+      list-style: none; /* 불릿 제거 */
+      background: #333; 
+      padding: 10px; 
+    }
+    nav li { 
+      display: inline-block; /* 가로 배치 */
+      margin-right: 20px; 
+    }
+    nav a { 
+      text-decoration: none; /* 밑줄 제거 */
+      color: white; 
+    }
+    nav a:hover { color: #fde68a; } /* 마우스 오버 효과 */
+
+    /* 2. 줄무늬 표 스타일 */
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: center; }
+    thead { background: #0ea5e9; color: white; }
+    tbody tr:nth-child(even) { background: #e0f2fe; } /* 짝수 행 줄무늬 */
+    tbody tr:hover { background: #fce7f3; } /* 행 하이라이트 */
+  </style>
+</head>
+<body>
+  <!-- 메뉴바 -->
+  <nav>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- 성적표 -->
+  <table>
+    <thead>
+      <tr><th>이름</th><th>HTML</th><th>CSS</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>김멋사</td><td>95</td><td>90</td></tr>
+      <tr><td>이코딩</td><td>88</td><td>92</td></tr>
+      <tr><td>박웹뷰</td><td>100</td><td>85</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

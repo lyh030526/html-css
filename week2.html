@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { display: flex; gap: 50px; padding: 50px; }
+
+    /* 1. 부드럽게 커지는 버튼 (Transition & Transform) */
+    .hover-btn {
+      width: 100px; height: 50px;
+      background: #f59e0b; color: white;
+      border: none; border-radius: 8px;
+      transition: all 0.3s ease; /* 부드러운 전환 */
+    }
+    .hover-btn:hover {
+      transform: scale(1.3); /* 크기 1.3배 확대 */
+      background: #b45309;
+    }
+
+    /* 2. 무한 반복 애니메이션 (Keyframes) */
+    .bouncing-ball {
+      width: 50px; height: 50px;
+      background: #0ea5e9;
+      border-radius: 50%;
+      animation: bounce 0.5s ease-in infinite alternate; /* 무한 왕복 */
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(100px); }
+    }
+  </style>
+</head>
+<body>
+  <!-- 커지는 버튼 -->
+  <button class="hover-btn">마우스 오버!</button>
+
+  <!-- 통통 튀는 공 -->
+  <div class="bouncing-ball"></div>
+</body>
+</html>
