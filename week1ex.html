@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>내 소개</title>
+</head>
+<body>
+
+  <!-- ① 텍스트 태그 -->
+  <h1>나의 자기소개</h1>
+
+  <p>
+    저는 <strong>웹 개발</strong>을 공부 중인
+    <em>홍길동</em>입니다.<br>
+    좋아하는 코드: <code>console.log("hello")</code>
+  </p>
+
+  <hr>
+
+  <!-- ② 목록 태그 -->
+  <h2>취미 목록</h2>
+
+  <ul>
+    <li>코딩</li>
+    <li>독서</li>
+    <li>게임</li>
+  </ul>
+
+  <h2>배울 기술 순위</h2>
+
+  <ol>
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>JavaScript</li>
+  </ol>
+
+  <hr>
+
+  <!-- ③ 표 태그 -->
+  <h2>기술 스택</h2>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>기술</th>
+        <th>숙련도</th>
+        <th>기간</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>HTML</td>
+        <td>⭐⭐⭐</td>
+        <td>3개월</td>
+      </tr>
+      <tr>
+        <td>CSS</td>
+        <td>⭐⭐</td>
+        <td>2개월</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3">※ 계속 공부 중!</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <hr>
+
+  <!-- ④ 폼 태그 -->
+  <h2>연락하기</h2>
+
+  <form>
+    <label>이름:</label>
+    <input type="text" placeholder="홍길동"><br><br>
+
+    <label>이메일:</label>
+    <input type="email" placeholder="example@email.com"><br><br>
+
+    <label>연락 수단:</label>
+    <input type="radio" name="contact"> 이메일
+    <input type="radio" name="contact"> 전화<br><br>
+
+    <label>문의 유형:</label>
+    <input type="checkbox"> 협업
+    <input type="checkbox"> 스터디<br><br>
+
+    <label>메시지:</label><br>
+    <textarea rows="3" cols="35" placeholder="하고 싶은 말을 써주세요"></textarea><br><br>
+
+    <input type="submit" value="전송">
+    <input type="reset" value="초기화">
+  </form>
+
+</body>
+</html>
